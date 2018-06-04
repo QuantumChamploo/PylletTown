@@ -55,6 +55,26 @@ class Player(pygame.sprite.Sprite):
                     self.orient = 'right'
                     self.setSprite()
                 self.holdTime += dt
+        elif key[pygame.K_a]:
+            if not self.walking:
+                lastRect2 = self.rect.copy()
+                if self.orient == 'up':
+                    self.rect.y -= 8
+                elif self.orient == 'down':
+                    self.rect.y += 8
+                elif self.orient == 'left':
+                    self.rect.x -= 8
+                elif self.orient == 'right':
+                    self.rect.x += 8
+                self.dx += 8
+
+                if len(game.tilemap.layers['actions'].collide(self.rect, 
+                                                                'sign')) > 0:
+                    print("here")
+                    
+                self.rect = lastRect2
+
+
         else:
             self.holdTime = 0
             self.step = 'rightFoot'
