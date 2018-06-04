@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="40" height="36" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" name="ground" tilewidth="32" tileheight="32" tilecount="6" columns="6">
+  <image source="tiles/groundCompiled.png" width="192" height="32"/>
+ </tileset>
+ <tileset firstgid="7" name="lab" tilewidth="32" tileheight="32" tilecount="96" columns="12">
+  <image source="tiles/lab.png" width="384" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="103" name="objects" tilewidth="32" tileheight="32" tilecount="18" columns="9">
+  <image source="tiles/objects.png" width="288" height="64"/>
+ </tileset>
+ <tileset firstgid="121" name="house" tilewidth="32" tileheight="32" tilecount="48" columns="8">
+  <image source="tiles/house.png" width="256" height="192"/>
+ </tileset>
+ <tileset firstgid="169" name="triggers" tilewidth="32" tileheight="32" tilecount="12" columns="6">
+  <image source="tiles/triggers.png" width="192" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="playerStart" value="down"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="entry" value="test.tmx"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="entry" value="test.tmx"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="water" value=""/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="181" name="sprites" tilewidth="32" tileheight="32" tilecount="8" columns="4">
+  <image source="tiles/sprites.png" width="128" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="frames" value="8"/>
+    <property name="height" value="32"/>
+    <property name="mspf" value="350"/>
+    <property name="src" value="sprites/water.png"/>
+    <property name="width" value="32"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="frames" value="4"/>
+    <property name="height" value="32"/>
+    <property name="mspf" value="350"/>
+    <property name="src" value="sprites/flower.png"/>
+    <property name="width" value="32"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="189" source="asdf.tsx"/>
+ <layer name="background" width="40" height="36" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztl0ESgyAMRRG9a3s3u2lPWBYy42QSwg8JZdHFHycI4fkJqFtKaWO0X+LutfpLQvN49Yvm0/L26kl0Fr0c83vqUfQu+jjm9PbTm6O2Z9LuFdOr1F/ji/QmMzyof9Jz9czdijXOGvesbxZySDou7eB47r43H+dDvjEf4PgI/+h8GheXN3J97/krH8KG+If6ResPrYeWTz3tPTHdH+h4yacstEf716of6/k3K0brjz7v6P7WZHn/RjKu9v4d9Q/Jhc7dMx71b/S7Prr+ND7tO0XzeLT+VvMvkq/lt7X+LHU+ohn/H5F83vWkrbOVb9RHaz2g+8Cav3Ue0XglPo73z4fz5fQbvujzZVU+idPrzLOeP7P4rPoCgjkSdA==
+  </data>
+ </layer>
+ <layer name="foreground" width="40" height="36" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt2PlTD3Ecx/F+KCkdKh2iQ+m+EKl0H4hS0UGRJMrVOKIJ0UXoICUhciT+zJ6/7Ex2vvvZz3d3P6WZ73vmMe+Z3e/nvZ95zc7nO7NeXq6rB70G90S/v4O+dd3qHLO6i3tuzNV+/wgD67rVOVpp+3WqG+VntWv7daob5We1u/t+bFTp8/vfSja/QTzGEzzFEJ7hOYYlnmN1vWx+IxjFGMbxAi8xgVcS+7O6Xja/13iDSUxhGjN4i3cS+7O6Xja/WbzHHObxAQv4iEWJ/Vldb5bfLdzGJ3zGFyzhK75hGd8F8+2uN8uvHw/xAz/xCyv4jVX8wV/BfLvrPeefvfLkZ69U5eeL7fCDP3YgAIEIQjB2IgShgjmq8gvDLoQjApGIwm5EYw/2Igaxgjmy+d3ATRddO9/0FYd47EMCErEfSUhGClKRhnTBc2Xzu48HLrp2vukrA5nIQjZycAAHcQi5OIwjyBM8V9X7dxT5KEAhjqEIxShBKcpQjgrBHFXvXyWqUI3jOIGTqMEpnEYt6nBGMEdVfvVoQCPO4hya0IwWtOI8LqBNMEdVfu24iEvowGV04gq6cBXduIbrgjme/w97pSo/s/NSf92oVOVndl7qrxuVbH4+JlSVbH7egnvbHN3RvyWb32btz5Ofvdpq+RnlaLY/p78fmn3/c3d/Tn8/1Pc1NvfWTw==
+  </data>
+ </layer>
+ <layer name="sprites" width="40" height="36" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt1NEJACAIQEH33ydarwmkIsiCOxB/H34YAQAAwKo+2ZVebgP+15LJ3P5JO30V/3L3frfpO6MvNwD0GCkj
+  </data>
+ </layer>
+ <layer name="triggers" width="40" height="36">
+  <data encoding="base64" compression="zlib">
+   eJztWEkOwzAIzP9/0qZ7+8ByCFKFisGAl7SMhDhgCIxsT+Rl+Y4z2IWJldavYI8Pb60j4Qn2MtS9b32hr+2Pfhfzo/wB7BhYH/uN6u8KdiOcRNSdDZS/2aDlz8u7NV/LH8Y5L8Gan/z58qU5aPy0mZX31ZjPzUHnxP6089N1qCfR+28UfuX+G4V/5S9K91vxJ913o/WjN3+18/fmrxa5/3zQ6u4s/HG6m/rbFnl+++kHN3vLfVujHxx69Kfhj0PLc5X8+bA3/kq+1J/33Uzymv85DpHvhpx/A1zFcpA=
+  </data>
+ </layer>
+</map>
