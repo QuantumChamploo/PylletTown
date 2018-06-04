@@ -70,8 +70,8 @@ class Player(pygame.sprite.Sprite):
 
                 if len(game.tilemap.layers['actions'].collide(self.rect, 
                                                                 'sign')) > 0:
-                    print("here")
-                    
+                    entryCell = game.tilemap.layers['actions'].find('sign')[0]
+                    game.initSign("asd")                    
                 self.rect = lastRect2
 
 
@@ -205,7 +205,38 @@ class Game(object):
         self.player = Player((startCell.px, startCell.py), 
                              startCell['playerStart'], self.players)
         self.tilemap.layers.append(self.players)
-        self.tilemap.set_focus(self.player.rect.x, self.player.rect.y)  
+        self.tilemap.set_focus(self.player.rect.x, self.player.rect.y) 
+
+    def initSign(self, signFile):
+        """Loads sign up"""
+        ggameDisplay = pygame.display.set_mode((800,600))
+        lookingAtsigh = True
+        while lookingAtsign:
+
+            
+            
+        
+            for event in pygame.event.get():
+                print(event)
+                if event.type == pygame.QUIT:
+                    keepPlaying = False
+                    pygame.quit()
+                    return
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    keepPlaying = False
+                    pygame.quit()
+                    
+                    return 
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+                    lookingAtsign = False    
+            gameDisplay.fill((255,0,0))
+            
+           
+            pygame.display.update()
+            clock.tick(15)
             
     def main(self):
         clock = pygame.time.Clock()
