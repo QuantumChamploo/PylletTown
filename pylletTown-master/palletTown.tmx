@@ -97,7 +97,7 @@
   </tile>
  </tileset>
  <tileset firstgid="189" source="asdf.tsx"/>
- <layer name="background" width="40" height="36" visible="0">
+ <layer name="background" width="40" height="36">
   <data encoding="base64" compression="zlib">
    eJztl0ESgyAMRRG9a3s3u2lPWBYy42QSwg8JZdHFHycI4fkJqFtKaWO0X+LutfpLQvN49Yvm0/L26kl0Fr0c83vqUfQu+jjm9PbTm6O2Z9LuFdOr1F/ji/QmMzyof9Jz9czdijXOGvesbxZySDou7eB47r43H+dDvjEf4PgI/+h8GheXN3J97/krH8KG+If6ResPrYeWTz3tPTHdH+h4yacstEf716of6/k3K0brjz7v6P7WZHn/RjKu9v4d9Q/Jhc7dMx71b/S7Prr+ND7tO0XzeLT+VvMvkq/lt7X+LHU+ohn/H5F83vWkrbOVb9RHaz2g+8Cav3Ue0XglPo73z4fz5fQbvujzZVU+idPrzLOeP7P4rPoCgjkSdA==
   </data>
@@ -117,7 +117,7 @@
    eJzt1NEJACAIQEH33ydarwmkIsiCOxB/H34YAQAAwKo+2ZVebgP+15LJ3P5JO30V/3L3frfpO6MvNwD0GCkj
   </data>
  </layer>
- <layer name="triggers" width="40" height="36">
+ <layer name="triggers" width="40" height="36" visible="0">
   <data encoding="base64" compression="zlib">
    eJztWEkOwzAIzP9/0qZ7+8ByCFKFisGAl7SMhDhgCIxsT+Rl+Y4z2IWJldavYI8Pb60j4Qn2MtS9b32hr+2Pfhfzo/wB7BhYH/uN6u8KdiOcRNSdDZS/2aDlz8u7NV/LH8Y5L8Gan/z58qU5aPy0mZX31ZjPzUHnxP6089N1qCfR+28UfuX+G4V/5S9K91vxJ913o/WjN3+18/fmrxa5/3zQ6u4s/HG6m/rbFnl+++kHN3vLfVujHxx69Kfhj0PLc5X8+bA3/kq+1J/33Uzymv85DpHvhpx/A1zFcpA=
   </data>
