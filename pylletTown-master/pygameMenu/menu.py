@@ -2,9 +2,7 @@
 """
 MENU
 Menu class.
-
 Copyright (C) 2017-2018 Pablo Pizarro @ppizarror
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -66,7 +64,6 @@ class Menu(object):
                  ):
         """
         Menu constructor.
-
         :param bgfun: Background drawing function (only if menu pause app)
         :param color_selected: Color of selected item
         :param dopause: Pause game
@@ -240,7 +237,6 @@ class Menu(object):
     def add_option(self, element_name, element, *args):
         """
         Add option to menu.
-
         :param element_name: Name of the element
         :param element: Object
         :param args: Aditional arguments
@@ -268,14 +264,11 @@ class Menu(object):
         Add a selector to menu: several options with values and two functions
         that execute when changing the selector (left/right) and pressing
         return button on the element.
-
         Values of the selector are like:
             values = [('Item1', a, b, c...), ('Item2', a, b, c..)]
-
         And functions onchange and onreturn does
             onchange(a, b, c..., **kwargs)
             onreturn(a, b, c..., **kwargs)
-
         :param title: Title of the selector
         :param values: Values of the selector [('Item1', var1..), ('Item2'...)]
         :param onchange: Function when changing the selector
@@ -310,13 +303,10 @@ class Menu(object):
         """
         Add a selector to the menu, apply function with values list and kwargs
         optional parameters when pressing left/right on the element.
-
         Values of the selector are like:
             values = [('Item1', a, b, c...), ('Item2', a, b, c..)]
-
         And when changing the value of the selector:
             fun(a, b, c,..., **kwargs)
-
         :param title: Title of the selector
         :param values: Values of the selector
         :param fun: Function to apply values when changing the selector
@@ -334,13 +324,10 @@ class Menu(object):
         """
         Add a selector to the menu, apply function with values list and kwargs
         optional parameters when pressing return on the element.
-
         Values of the selector are like:
             values = [('Item1', a, b, c...), ('Item2', a, b, c..)]
-
         And when pressing return on the selector:
             fun(a, b, c,..., **kwargs)
-
         :param title: Title of the selector
         :param values: Values of the selector
         :param fun: Function to apply values when pressing return on the element
@@ -357,7 +344,6 @@ class Menu(object):
     def disable(self):
         """
         Disable menu.
-
         :return: None
         """
         if self.is_enabled():
@@ -367,7 +353,6 @@ class Menu(object):
     def _down(self):
         """
         Move selection down.
-
         :return: None
         """
         if self._actual._size == 0:
@@ -377,7 +362,6 @@ class Menu(object):
     def draw(self):
         """
         Draw menu to surface.
-
         :return:
         """
         # Draw background rectangle
@@ -477,7 +461,6 @@ class Menu(object):
     def enable(self):
         """
         Enable menu.
-
         :return: None
         """
         if self.is_disabled():
@@ -487,7 +470,6 @@ class Menu(object):
     def get_title(self):
         """
         Return title of the Menu
-
         :return: Title
         :rtype: str
         """
@@ -496,7 +478,6 @@ class Menu(object):
     def is_disabled(self):
         """
         Returns false/true if Menu is enabled or not
-
         :return: Boolean
         :rtype: bool
         """
@@ -505,7 +486,6 @@ class Menu(object):
     def is_enabled(self):
         """
         Returns true/false if Menu is enabled or not
-
         :return: Boolean
         :rtype: bool
         """
@@ -514,7 +494,6 @@ class Menu(object):
     def _main(self, events=None):
         """
         Main function of the loop.
-
         :param events: Pygame events
         :return: None
         """
@@ -524,10 +503,12 @@ class Menu(object):
         if events is None:
             events = _pygame.event.get()
         for event in events:
+            
             # noinspection PyUnresolvedReferences
             if event.type == _pygame.locals.QUIT:
                 exit()
             elif event.type == _pygame.locals.KEYDOWN:
+                
                 if event.key == _ctrl.MENU_CTRL_DOWN:
                     self._down()
                 elif event.key == _ctrl.MENU_CTRL_UP:
@@ -546,6 +527,8 @@ class Menu(object):
                         not self._closelocked:
                     onclose = self._actual._onclose
                     close = True
+                    
+
                     if not isinstance(onclose, type(None)):
                         a = isinstance(onclose, _locals.PymenuAction)
                         b = str(type(onclose)) == _locals.PYGAMEMENU_PYMENUACTION
@@ -558,12 +541,18 @@ class Menu(object):
                                 exit()
                             elif onclose == _locals.PYGAME_MENU_DISABLE_CLOSE:
                                 close = False
+                            elif onclose == _locals.PYGAME_MENU_CLOSE:
+                                print ('getting closer')
+                                close = True
                         elif isinstance(onclose, types.FunctionType):
                             onclose()
                     else:
                         close = False
+
                     if close:
                         self.disable()
+
+                        print ('set up return')
                         return True
             elif self._joystick and event.type == _pygame.JOYHATMOTION:
                 if event.value == _locals.JOY_UP:
@@ -589,13 +578,13 @@ class Menu(object):
                 elif event.button == _locals.JOY_BUTTON_BACK:
                     self.reset(1)
         _pygame.display.flip()
+
         self._closelocked = False
         return False
 
     def mainloop(self, events):
         """
         Main function of Menu, draw, etc.
-
         :param events: Menu events
         :return: None
         """
@@ -607,7 +596,7 @@ class Menu(object):
             while True:
                 
                 if self._main():
-
+                    print ('got through if statement')
                     return
         else:
             self._main(events)
@@ -615,7 +604,6 @@ class Menu(object):
     def _left(self):
         """
         Move selector left
-
         :return: None
         """
         try:
@@ -629,7 +617,6 @@ class Menu(object):
     def reset(self, total):
         """
         Reset menu.
-
         :param total: How many menus to reset (1: back)
         :type total: int
         :return:
@@ -657,7 +644,6 @@ class Menu(object):
     def _right(self):
         """
         Move selector to right.
-
         :return: None
         """
         try:
@@ -670,7 +656,6 @@ class Menu(object):
     def _select(self):
         """
         Apply selected option.
-
         :return:
         """
         assert isinstance(self._actual, Menu)
@@ -730,7 +715,6 @@ class Menu(object):
     def set_title(self, title, offsetx=0, offsety=0):
         """
         Set menu title.
-
         :param title: Menu title
         :param offsetx: Offset x-position of title (px)
         :param offsety: Offset y-position of title (px)
@@ -765,7 +749,6 @@ class Menu(object):
     def _up(self):
         """
         Option up.
-
         :return: None
         """
         if self._actual._size == 0:
@@ -775,7 +758,6 @@ class Menu(object):
     def update_selector(self, selector_id, values):
         """
         Update selector given its ID.
-
         :param selector_id: ID of existing selector
         :param values: Values of the selector [('Item1', var1..), ('Item2'...)]
         :return:

@@ -3,6 +3,8 @@ from pygame.locals import *
 import tmx
 import pygameMenu
 from pygameMenu.locals import *
+import glob
+import os
 
 
 aCounter = 0
@@ -15,6 +17,82 @@ COLOR_WHITE = (255, 255, 255)
 COLOR_BLACK = (0, 0, 0)
 COLOR_MAROON =  (40, 0, 40)
 MENU_BACKGROUND_COLOR = (228, 55, 36)
+
+
+menuSets = [
+
+
+
+
+
+
+
+
+
+]
+
+def initMenu():
+        """"create generic menu for in game    """
+        gameDisplay = pygame.display.set_mode((800,600))
+
+        stillOn = True
+
+        clock = pygame.time.Clock()
+
+        def close_fun():
+            print (main_menu.is_disabled())
+            main_menu.disable()
+            print (main_menu.is_disabled())
+
+        def mainmenu_background():
+            """Background color of the main menu, on this function user can plot
+                images, play sounds, etc."""
+            gameDisplay.fill((40, 0, 40))
+            
+
+
+
+
+        main_menu = pygameMenu.Menu(gameDisplay,
+                                    bgfun=mainmenu_background,
+                                    color_selected=COLOR_WHITE,
+                                    font=pygameMenu.fonts.FONT_BEBAS,
+                                    font_color=COLOR_BLACK,
+                                    font_size=30,
+                                    menu_alpha=100,
+                                    menu_color=(40,0,40),
+                                    menu_height=600,
+                                    menu_width=800,
+                                    onclose=PYGAME_MENU_CLOSE,
+                                    option_shadow=False,
+                                    title='RPmG',
+                                    window_height=600,
+                                    window_width=800
+                                    )
+
+        # main_menu.add_option('Save', saveGame)
+                                    
+        main_menu.add_option('Close: press esc to leave', PYGAME_MENU_CLOSE)
+
+        looping = True
+        while looping:
+
+            # Tick
+            clock.tick(60)
+
+            # Application events
+            events = pygame.event.get()
+            for event in events:
+                if event.type == QUIT:
+                    exit()
+
+            # Main menu
+            main_menu.mainloop(events)
+            looping = False
+
+
+            # Flip surface
+            pygame.display.flip()
 
 
 def text_objects(text, font):
@@ -98,7 +176,10 @@ class Player(pygame.sprite.Sprite):
                     clock = pygame.time.Clock()
                     gameDisplay = pygame.display.set_mode((800,600))  
                     thisImage = pygame.image.load('uujihyugtguyh.png')
-                    displaying = True
+                    game.save[3] = 'CHANGED'
+                    game.initMenu()
+
+                    displaying = False
                     while displaying:
             
             
@@ -298,6 +379,85 @@ class Game(object):
     def initStartmenu(self):
         print ("start menu")
 
+    def saveGame(self):
+        hldString = ""
+        for i in range(len(self.save)-1):
+            hldString += self.save[i] + ","
+        hldString += self.save[len(self.save)-1]
+
+        path = os.getcwd() + '/SaveFiles/' + self.save[0]
+
+        fileRead = open(path, 'w')
+
+        fileRead.write(hldString)
+
+        print (hldString)
+
+
+    def initMenu(self):
+        """"create generic menu for in game    """
+        gameDisplay = pygame.display.set_mode((800,600))
+
+        stillOn = True
+
+        clock = pygame.time.Clock()
+
+        def close_fun():
+            print (main_menu.is_disabled())
+            main_menu.disable()
+            print (main_menu.is_disabled())
+
+        def mainmenu_background():
+            """Background color of the main menu, on this function user can plot
+                images, play sounds, etc."""
+            gameDisplay.fill((40, 0, 40))
+            
+
+
+
+
+        main_menu = pygameMenu.Menu(gameDisplay,
+                                    bgfun=mainmenu_background,
+                                    color_selected=COLOR_WHITE,
+                                    font=pygameMenu.fonts.FONT_BEBAS,
+                                    font_color=COLOR_BLACK,
+                                    font_size=30,
+                                    menu_alpha=100,
+                                    menu_color=(40,0,40),
+                                    menu_height=600,
+                                    menu_width=800,
+                                    onclose=mainmenu_background,
+                                    option_shadow=False,
+                                    title='RPmG',
+                                    window_height=600,
+                                    window_width=800
+                                    )
+        print ('inside the game init menu')
+
+        main_menu.add_option('Save the Game', self.saveGame)
+        main_menu.add_option('Close: Pressasdfg esc', PYGAME_MENU_CLOSE)
+
+        looping = True
+        while looping:
+
+            # Tick
+            clock.tick(60)
+
+            # Application events
+            events = pygame.event.get()
+            for event in events:
+                if event.type == QUIT:
+                    exit()
+
+            # Main menu
+            main_menu.mainloop(events)
+            looping = False
+
+
+            # Flip surface
+            pygame.display.flip()
+
+
 
     def introMenu(self):
 
@@ -310,6 +470,12 @@ class Game(object):
             mainMenu.reset(1)
             clock = pygame.time.Clock()
 
+            # self.initMenu()
+
+            
+            if len(self.save) != 0:
+                self.initArea(self.save[1])
+
             playLoop = True
             while playLoop:
                 dt = clock.tick(30)
@@ -319,24 +485,39 @@ class Game(object):
                         return
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                         return
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                        self.initMenu()
                 thisImage = pygame.image.load('MGlogo.jpg')
 
                 self.tilemap.update(dt, self)
                 screen.fill((0,0,0))
 
                 self.tilemap.draw(self.screen)
+
                 
                 gameDisplay.blit(thisImage, (690, 500))
                 pygame.display.flip()
+            print ('hello world')
 
         def mainmenu_background():
             """Background color of the main menu, on this function user can plot
                 images, play sounds, etc."""
             gameDisplay.fill((40, 0, 40))
 
-        def hldfunction():
-            print('hereASDFASDF')
-            print('adsfasdfasdf')
+        def hldfunction(filename):
+            path = os.getcwd() + '/SaveFiles/' + filename 
+            fileRead = open(path, 'r')
+            hldString = ""
+
+            for line in fileRead:
+                hldString += line
+            
+            self.save = hldString.split(',')
+            
+            print ('oh over here')
+            print (self.save)
+
+            play_function()
 
 
         newgameMenu = pygameMenu.Menu(gameDisplay,
@@ -349,7 +530,7 @@ class Game(object):
                                     menu_color=(40,0,40),
                                     menu_height=600,
                                     menu_width=800,
-                                    onclose=PYGAME_MENU_DISABLE_CLOSE,
+                                    onclose=mainmenu_background,
                                     option_shadow=False,
                                     title='New Game',
                                     window_height=600,
@@ -368,7 +549,7 @@ class Game(object):
                                     menu_color=(40,0,40),
                                     menu_height=600,
                                     menu_width=800,
-                                    onclose=PYGAME_MENU_DISABLE_CLOSE,
+                                    onclose=mainmenu_background,
                                     option_shadow=False,
                                     title='RPmG',
                                     window_height=600,
@@ -386,7 +567,7 @@ class Game(object):
                                     menu_color=(40,0,40),
                                     menu_height=600,
                                     menu_width=800,
-                                    onclose=PYGAME_MENU_DISABLE_CLOSE,
+                                    onclose=mainmenu_background,
                                     option_shadow=False,
                                     title='Load Game',
                                     window_height=600,
@@ -401,12 +582,17 @@ class Game(object):
         newgameMenu.add_option('Return to Menu', PYGAME_MENU_BACK)
         newgameMenu.add_option('New Game', play_function)
         loadgameMenu.add_option('Return to Menu', PYGAME_MENU_BACK)
-        loadgameMenu.add_option('Close', PYGAME_MENU_CLOSE)
-        loadgameMenu.add_option('Print stuff',hldfunction)
-        mainMenu.add_option('Exit', PYGAME_MENU_EXIT)
         
+        # loadgameMenu.add_option('Load Game',hldfunction)
+        mainMenu.add_option('Exit', PYGAME_MENU_EXIT)
 
-        while True:
+        path = os.getcwd() + '/SaveFiles'
+        for filename in os.listdir(path):
+            loadgameMenu.add_option(filename, hldfunction, filename)
+        
+        looping = True
+
+        while looping:
             clock.tick(60)
 
             gameDisplay.fill(COLOR_BACKGROUND)
@@ -415,7 +601,7 @@ class Game(object):
             events = pygame.event.get()
 
             mainMenu.mainloop(events)
-            print ("looping")
+            looping = False
 
             pygame.display.flip()
 
@@ -471,7 +657,7 @@ class Game(object):
         self.initArea('test3.tmx')
         print (self.save)
 
-        keepPlaying = True
+        keepPlaying = False
 
         intro = False
 
@@ -577,7 +763,12 @@ class Game(object):
         
 
         startMenu = False
+
+        # this is everything
         self.introMenu()
+
+
+
         while startMenu:
             clock.tick(60)
             gameDisplay.fill(COLOR_BACKGROUND)

@@ -150,7 +150,7 @@ play_menu = pygameMenu.Menu(surface,
                             menu_color=MENU_BACKGROUND_COLOR,
                             menu_height=int(WINDOW_SIZE[1] * 0.6),
                             menu_width=int(WINDOW_SIZE[0] * 0.6),
-                            onclose=PYGAME_MENU_DISABLE_CLOSE,
+                           
                             option_shadow=False,
                             title='Play menu',
                             window_height=WINDOW_SIZE[1],
@@ -178,7 +178,7 @@ about_menu = pygameMenu.TextMenu(surface,
                                  menu_color_title=COLOR_WHITE,
                                  menu_height=int(WINDOW_SIZE[1] * 0.6),
                                  menu_width=int(WINDOW_SIZE[0] * 0.6),
-                                 onclose=PYGAME_MENU_DISABLE_CLOSE,
+                                
                                  option_shadow=False,
                                  text_color=COLOR_BLACK,
                                  text_fontsize=20,
@@ -202,7 +202,7 @@ main_menu = pygameMenu.Menu(surface,
                             menu_color=MENU_BACKGROUND_COLOR,
                             menu_height=int(WINDOW_SIZE[1] * 0.6),
                             menu_width=int(WINDOW_SIZE[0] * 0.6),
-                            onclose=PYGAME_MENU_DISABLE_CLOSE,
+                            onclose=PYGAME_MENU_CLOSE,
                             option_shadow=False,
                             title='Main menu',
                             window_height=WINDOW_SIZE[1],
@@ -211,6 +211,7 @@ main_menu = pygameMenu.Menu(surface,
 main_menu.add_option('Play', play_menu)
 main_menu.add_option('About', about_menu)
 main_menu.add_option('Quit', PYGAME_MENU_EXIT)
+main_menu.add_option('close', PYGAME_MENU_CLOSE)
 
 # -----------------------------------------------------------------------------
 # Main loop
@@ -225,8 +226,9 @@ while True:
         if event.type == QUIT:
             exit()
 
+    print ('enter loop')
     # Main menu
     main_menu.mainloop(events)
-
+    print ('left loop')
     # Flip surface
     pygame.display.flip()
