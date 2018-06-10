@@ -622,48 +622,6 @@ class Game(object):
 
 
 
-
-
-    def initSign(self, signFile):
-        """Loads sign up"""
-        clock = pygame.time.Clock()
-        gameDisplay = pygame.display.set_mode((800,600))  
-        thisImage = pygame.image.load('uujihyugtguyh.png')
-        displaying = True
-        while displaying:
-
-
-
-            for event in pygame.event.get():
-                print(event)
-                if event.type == pygame.QUIT:
-                     
-                    pygame.quit()
-                    return
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    
-                    pygame.quit()
-            
-                    return 
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYUP and event.key == pygame.K_s:
-                    displaying = False
-            gameDisplay.fill(red)    
-            gameDisplay.blit(thisImage, (100, 0))
-            largeText = pygame.font.Font('freesansbold.ttf',35)
-            TextSurf, TextRect = text_objects("Click 's' to leave 'menu'", largeText)
-            TextRect.center = ((300),(200))
-            gameDisplay.blit(TextSurf, TextRect)
-    
-   
-            pygame.display.update()
-            clock.tick(15)  
-            print ("HERE")
-
-
-
     
 
     def main(self):
@@ -671,44 +629,11 @@ class Game(object):
         self.initArea('test3.tmx')
         print (self.save)
 
-        keepPlaying = False
-
-        intro = False
+        
 
         gameDisplay = pygame.display.set_mode((800,600))
         
-        while intro:
-            
-            
         
-            for event in pygame.event.get():
-                print(event)
-                if event.type == pygame.QUIT:
-                    keepPlaying = False
-                    pygame.quit()
-                    return
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    keepPlaying = False
-                    pygame.quit()
-                    
-                    return 
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYUP and event.key == pygame.K_a:
-                    intro = False    
-            gameDisplay.fill(red)
-            
-            largeText = pygame.font.Font('freesansbold.ttf',35)
-            TextSurf, TextRect = text_objects("Click 'a' to leave 'menu'", largeText)
-            TextRect.center = ((300),(200))
-            gameDisplay.blit(TextSurf, TextRect)
-
-            pygame.display.update()
-            clock.tick(15)
-            # print("i am in the introOOOOO")
-                      
-            # intro = False
 
         def mainmenu_background():
             """Background color of the main menu, on this function user can plot
@@ -775,67 +700,12 @@ class Game(object):
         
         
         
-
-        startMenu = False
-
         # this is everything
         self.introMenu()
 
 
 
-        while startMenu:
-            clock.tick(60)
-            gameDisplay.fill(COLOR_BACKGROUND)
-
-
-            events = pygame.event.get()
-            menu.enable()
-            for event in pygame.event.get():
-                print(event)
-                if event.type == QUIT:
-                    
-                    exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    
-                    pygame.quit()
-                    
-                    return 
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYUP and event.key == pygame.K_a:
-                    startMenu = False
-
-
-            menu.mainloop(events)
-
-             # Flip surface
-            pygame.display.flip()
-
-
-
-
-
-        while keepPlaying:
-            
-            dt = clock.tick(30)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    return
-            thisImage = pygame.image.load('MGlogo.jpg')
-
-            self.tilemap.update(dt, self)
-            screen.fill((0,0,0))
-
-            self.tilemap.draw(self.screen)
-            
-            gameDisplay.blit(thisImage, (690, 500))
-            pygame.display.flip()
-
-
+       
 if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((640, 480))

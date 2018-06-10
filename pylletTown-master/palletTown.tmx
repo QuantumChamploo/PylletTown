@@ -99,7 +99,7 @@
  <tileset firstgid="189" source="asdf.tsx"/>
  <layer name="background" width="40" height="36">
   <data encoding="base64" compression="zlib">
-   eJztl0ESgyAMRRG9a3s3u2lPWBYy42QSwg8JZdHFHycI4fkJqFtKaWO0X+LutfpLQvN49Yvm0/L26kl0Fr0c83vqUfQu+jjm9PbTm6O2Z9LuFdOr1F/ji/QmMzyof9Jz9czdijXOGvesbxZySDou7eB47r43H+dDvjEf4PgI/+h8GheXN3J97/krH8KG+If6ResPrYeWTz3tPTHdH+h4yacstEf716of6/k3K0brjz7v6P7WZHn/RjKu9v4d9Q/Jhc7dMx71b/S7Prr+ND7tO0XzeLT+VvMvkq/lt7X+LHU+ohn/H5F83vWkrbOVb9RHaz2g+8Cav3Ue0XglPo73z4fz5fQbvujzZVU+idPrzLOeP7P4rPoCgjkSdA==
+   eJztl00SgyAMhRW9a3u3dtOesC5kxskkJC8/6qKLNw4I4eMRQOdpmmZGyy7u3ai9JDROVrtqPi2uVU+i16Z3YvxMPTZ9Nn0TY2b7mc3R6xupzyrTp9Re46v0pjE8qH/SvCxjj8oaZy9b1rcJMSStuxawP/c+m4/zoR2YV7B/hX90PI2Li1u5vsf4nQ9hQ/xD/aL5h+bDyCdLvaVM9wfaX/KpCfXV/o3yx3v+nVVG84/ON7q/NXnu30rGu92/Uf+QWOjYlv6of1nf91X5p3G1QUzLN000/5D/mTP88/BZ15hbn2j+jeZIGfs4EUX/P7h1pflYyYd659nHRx+8fNH71CqUD/VDim85j7h8uJpPy9c/n53rCr7q8+WufBKn58yQ5pERp4rPqx8behJC
   </data>
  </layer>
  <layer name="actions" width="40" height="36">
