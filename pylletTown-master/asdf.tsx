@@ -31,6 +31,14 @@
    <property name="sign" value="heytoo"/>
   </properties>
  </tile>
+ <tile id="44">
+  <properties>
+   <property name="hasInteraction" value="true"/>
+   <property name="height" value="64"/>
+   <property name="src" value="sprites/mssnglyph.png"/>
+   <property name="width" value="32"/>
+  </properties>
+ </tile>
  <tile id="54">
   <properties>
    <property name="sign" value="heytoo"/>

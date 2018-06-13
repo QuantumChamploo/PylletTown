@@ -101,7 +101,51 @@ def initMenu():
 def text_objects(text, font):
         textSurface = font.render(text, True, black)
         return textSurface, textSurface.get_rect()
-        
+
+def pacingUpdate(sprite, dt, game):
+	if sprite.pause == False:
+		sprite.timeCount += dt
+
+	if sprite.direction == 'left':
+		if sprite.pause == False:
+			sprite.pacing -= dt/25
+
+	if sprite.direction == 'right':
+		if sprite.pause == False:
+			sprite.pacing += dt/25
+
+	if sprite.pacing <= -150:
+		sprite.direction = 'right'
+		sprite.image = pygame.transform.flip(sprite.image, True, False)
+
+	if sprite.pacing >= 150:
+		sprite.direction = 'left'
+		sprite.image = pygame.transform.flip(sprite.image, True, False)
+
+	sprite.currLocation = (sprite.location[0] + sprite.pacing, sprite.location[1])
+
+	sprite.rect = pygame.Rect(sprite.currLocation, (sprite.width,sprite.height))
+
+def cutsceneUpdate(player, dt, game, cutscene):
+	if cutscene == 'walking intro':
+		
+		player.hldy -= 4
+		if player.hldy >= -256:
+			player.rect.y -= 4
+			game.tilemap.set_focus(player.rect.x, player.rect.y)
+		else:
+			player.inCutscene = False
+			player.hldy = 0
+
+	else:
+		
+		player.inCutscene = False
+
+
+
+
+
+	
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, location, orientation, *groups):
@@ -114,6 +158,11 @@ class Player(pygame.sprite.Sprite):
         self.walking = False
         self.dx = 0
         self.step = 'rightFoot'
+        self.inCutscene = False
+        self.whichCutscene = ''
+        self.hldx = 0;
+        self.hldy = 0;
+
         # Set default orientation
         self.setSprite()
         
@@ -134,154 +183,227 @@ class Player(pygame.sprite.Sprite):
         aCounter = 0
 
         key = pygame.key.get_pressed()
+        if self.inCutscene == True:
+        	cutsceneUpdate(self, dt, game, self.whichCutscene)
+
+
         # Setting orientation and sprite based on key input: 
-        if key[pygame.K_UP]:
-            if not self.walking:
-                if self.orient != 'up':
-                    self.orient = 'up'
-                    self.setSprite()
-                self.holdTime += dt
-                if(aCounter < 5):
-                    aCounter += 1
-        elif key[pygame.K_DOWN]:
-            if not self.walking:
-                if self.orient != 'down':
-                    self.orient = 'down'
-                    self.setSprite()    
-                self.holdTime += dt
-        elif key[pygame.K_LEFT]:
-            if not self.walking:
-                if self.orient != 'left':
-                    self.orient = 'left'
-                    self.setSprite()
-                self.holdTime += dt
-        elif key[pygame.K_RIGHT]:
-            if not self.walking:
-                if self.orient != 'right':
-                    self.orient = 'right'
-                    self.setSprite()
-                self.holdTime += dt
-        elif key[pygame.K_a] and not self.walking:
-            if not self.walking:
-                lastRect2 = self.rect.copy()
-                if self.orient == 'up':
-                    self.rect.y -= 8
-                elif self.orient == 'down':
-                    self.rect.y += 8
-                elif self.orient == 'left':
-                    self.rect.x -= 8
-                elif self.orient == 'right':
-                    self.rect.x += 8
-               # self.dx += 8
 
-                if len(game.tilemap.layers['actions'].collide(self.rect, 
-                                                                'sign')) > 0:
-                    clock = pygame.time.Clock()
-                    gameDisplay = pygame.display.set_mode((800,600))  
-                    thisImage = pygame.image.load('uujihyugtguyh.png')
-                    game.save[3] = 'CHANGED'
-                    #game.initMenu()
+        if self.inCutscene == False:
+	
 
-                    
-
-                    displaying = True
-
-                    while displaying:
-            
-            
-        
-                        for event in pygame.event.get():
-                            print(event)
-                            if event.type == pygame.QUIT:
-                                 
-                                pygame.quit()
-                                return
-                            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                                
-                                pygame.quit()
-                        
-                                return 
-                            if event.type == pygame.QUIT:
-                                pygame.quit()
-                                quit()
-                            if event.type == pygame.KEYUP and event.key == pygame.K_s:
-                                displaying = False
-                        #gameDisplay.fill(red)    
-                        # gameDisplay.blit(thisImage, (100, 0))
-                        
-                        #gameDisplay.blit(currState, (0,0))
-                        largeText = pygame.font.Font('freesansbold.ttf',35)
-                        TextSurf, TextRect = text_objects('press s to leave interaction', largeText)
-                        TextRect.center = ((300),(510))
-                        textBoxImage = pygame.image.load('smallTextBox.png')
-                        
-                        game.tilemap.draw(game.screen)
-                        gameDisplay.blit(textBoxImage, (25,480))
-                        gameDisplay.blit(TextSurf, TextRect)
-
-                        
-                        
-               
-                        pygame.display.flip()
-                        clock.tick(15)  
-                        
+	        if key[pygame.K_UP]:
+	            if not self.walking:
+	                if self.orient != 'up':
+	                    self.orient = 'up'
+	                    self.setSprite()
+	                self.holdTime += dt
+	                if(aCounter < 5):
+	                    aCounter += 1
+	        elif key[pygame.K_DOWN]:
+	            if not self.walking:
+	                if self.orient != 'down':
+	                    self.orient = 'down'
+	                    self.setSprite()    
+	                self.holdTime += dt
+	        elif key[pygame.K_LEFT]:
+	            if not self.walking:
+	                if self.orient != 'left':
+	                    self.orient = 'left'
+	                    self.setSprite()
+	                self.holdTime += dt
+	        elif key[pygame.K_RIGHT]:
+	            if not self.walking:
+	                if self.orient != 'right':
+	                    self.orient = 'right'
+	                    self.setSprite()
+	                self.holdTime += dt
+	        elif key[pygame.K_a] and not self.walking:
+	            if not self.walking:
+	                lastRect2 = self.rect.copy()
+	                if self.orient == 'up':
+	                    self.rect.y -= 8
+	                elif self.orient == 'down':
+	                    self.rect.y += 8
+	                elif self.orient == 'left':
+	                    self.rect.x -= 8
+	                elif self.orient == 'right':
+	                    self.rect.x += 8
+	               # self.dx += 8
 
 
-                self.rect = lastRect2
+	                for sprite in game.sprites:
+	                	if sprite.hasInteraction == True:
+	                		if abs(sprite.currLocation[0] - self.rect.x) < 10:
+	                			if abs(sprite.currLocation[1] - self.rect.y) < 10:
+	                				hld = sprite.pacing
+	                				print (sprite.currLocation)
+	                				sprite.pause = True
+	                				clock = pygame.time.Clock()
+	                				gameDisplay = pygame.display.set_mode((800,600))
+
+	                				displaying = True
+
+	                				while displaying:
+
+	                					for event in pygame.event.get():
+	                						if event.type == pygame.QUIT:
+	                							pygame.quit()
+	                							return
+	                						if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+	                							pygame.quit()
+	                							return
+	                						if event.type == pygame.QUIT:
+	                							pygameMenu.quit()
+	                							quit()
+	                						if event.type == pygame.KEYUP and event.key == pygame.K_s:
+	                							displaying = False
+	                						largeText = pygame.font.Font('freesansbold.ttf',35)
+	                						TextSurf, TextRect = text_objects('press s to leave interaction', largeText)
+	                						TextRect.center = ((300),(510))
+	                						textBoxImage = pygame.image.load('smallTextBox.png')
+
+	                						game.tilemap.draw(game.screen)
+	                						gameDisplay.blit(textBoxImage, (25,480))
+	                						gameDisplay.blit(TextSurf, TextRect)
+
+	                						pygame.display.flip()
+	                						clock.tick(15)
+	                				print ('over heheheeh')
+	                				print (sprite.currLocation)
+	                				sprite.pause = False
+	                				sprite.pacing = hld
 
 
-        else:
-            self.holdTime = 0
-            self.step = 'rightFoot'
-        # Walking mode enabled if a button is held for 0.1 seconds
-        if self.holdTime >= 100:
-            self.walking = True
-        lastRect = self.rect.copy()
-        # Walking at 8 pixels per frame in the direction the player is facing 
-        if self.walking and self.dx < 64:
-            if self.orient == 'up':
-                self.rect.y -= 8
-            elif self.orient == 'down':
-                self.rect.y += 8
-            elif self.orient == 'left':
-                self.rect.x -= 8
-            elif self.orient == 'right':
-                self.rect.x += 8
-            self.dx += 8
-        # Collision detection:
-        # Reset to the previous rectangle if player collides
-        # with anything in the foreground layer
-        if len(game.tilemap.layers['triggers'].collide(self.rect, 
-                                                        'solid')) > 0:
-            self.rect = lastRect
-        # Area entry detection:
-        elif len(game.tilemap.layers['triggers'].collide(self.rect, 
-                                                        'entry')) > 0:
-            entryCell = game.tilemap.layers['triggers'].find('entry')[0]
-            print ("going to area" + str(entryCell['entry']))
+	               	if len(game.tilemap.layers['interactions'].collide(self.rect,
+	               													'event')) > 0:
+	               		clock = pygame.time.Clock()
+	               		gameDisplay = pygame.display.set_mode((800,600))
+	               		entryCell = game.tilemap.layers['interactions'].find('event')[0]
+	               		self.whichCutscene = str(entryCell['event'])
+	               		self.inCutscene = True
+	               		print (self.inCutscene)
 
-            game.fadeOut()
-            game.initArea(entryCell['entry'])
-            
-            return
-        # Switch to the walking sprite after 32 pixels 
-        if self.dx == 32:
-            # Self.step keeps track of when to flip the sprite so that
-            # the character appears to be taking steps with different feet.
-            if (self.orient == 'up' or 
-                self.orient == 'down') and self.step == 'leftFoot':
-                self.image = pygame.transform.flip(self.image, True, False)
-                self.step = 'rightFoot'
-            else:
-                self.image.scroll(-64, 0)
-                self.step = 'leftFoot'
-        # After traversing 64 pixels, the walking animation is done
-        if self.dx == 64:
-            self.walking = False
-            self.setSprite()    
-            self.dx = 0
-        
-        game.tilemap.set_focus(self.rect.x, self.rect.y)
+
+	                if len(game.tilemap.layers['actions'].collide(self.rect, 
+	                                                                'sign')) > 0:
+	                    clock = pygame.time.Clock()
+	                    gameDisplay = pygame.display.set_mode((800,600))  
+	                    thisImage = pygame.image.load('uujihyugtguyh.png')
+	                    game.save[3] = 'CHANGED'
+	                    #game.initMenu()
+
+	                    
+
+	                    displaying = True
+
+	                    while displaying:
+	            
+	            
+	        
+	                        for event in pygame.event.get():
+	                            print(event)
+	                            if event.type == pygame.QUIT:
+	                                 
+	                                pygame.quit()
+	                                return
+	                            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+	                                
+	                                pygame.quit()
+	                        
+	                                return 
+	                            if event.type == pygame.QUIT:
+	                                pygame.quit()
+	                                quit()
+	                            if event.type == pygame.KEYUP and event.key == pygame.K_s:
+	                                displaying = False
+	                        #gameDisplay.fill(red)    
+	                        # gameDisplay.blit(thisImage, (100, 0))
+	                        
+	                        #gameDisplay.blit(currState, (0,0))
+	                        largeText = pygame.font.Font('freesansbold.ttf',35)
+	                        TextSurf, TextRect = text_objects('press s to leave interaction', largeText)
+	                        TextRect.center = ((300),(510))
+	                        textBoxImage = pygame.image.load('smallTextBox.png')
+	                        
+	                        game.tilemap.draw(game.screen)
+	                        gameDisplay.blit(textBoxImage, (25,480))
+	                        gameDisplay.blit(TextSurf, TextRect)
+
+	                        
+	                        
+	               
+	                        pygame.display.flip()
+	                        clock.tick(15)  
+	                        
+
+
+	                self.rect = lastRect2
+
+
+	        else:
+	            self.holdTime = 0
+	            self.step = 'rightFoot'
+	        # Walking mode enabled if a button is held for 0.1 seconds
+	        if self.holdTime >= 100:
+	            self.walking = True
+	        lastRect = self.rect.copy()
+	        # Walking at 8 pixels per frame in the direction the player is facing 
+	        if self.walking and self.dx < 64:
+	            if self.orient == 'up':
+	                self.rect.y -= 8
+	            elif self.orient == 'down':
+	                self.rect.y += 8
+	            elif self.orient == 'left':
+	                self.rect.x -= 8
+	            elif self.orient == 'right':
+	                self.rect.x += 8
+	            self.dx += 8
+	        # Collision detection:
+	        # Reset to the previous rectangle if player collides
+	        # with anything in the foreground layer
+	        if len(game.tilemap.layers['triggers'].collide(self.rect, 
+	                                                        'solid')) > 0:
+	            self.rect = lastRect
+	        # Area entry detection:
+	        elif len(game.tilemap.layers['triggers'].collide(self.rect, 
+	                                                        'entry')) > 0:
+	            entryCell = game.tilemap.layers['triggers'].find('entry')[0]
+	            print ("going to area" + str(entryCell['entry']))
+
+	            game.fadeOut()
+	            game.initArea(entryCell['entry'])
+	            
+	            return
+	        # Switch to the walking sprite after 32 pixels 
+	        if self.dx == 32:
+	            # Self.step keeps track of when to flip the sprite so that
+	            # the character appears to be taking steps with different feet.
+	            if (self.orient == 'up' or 
+	                self.orient == 'down') and self.step == 'leftFoot':
+	                self.image = pygame.transform.flip(self.image, True, False)
+	                self.step = 'rightFoot'
+	            else:
+	                self.image.scroll(-64, 0)
+	                self.step = 'leftFoot'
+	        # After traversing 64 pixels, the walking animation is done
+	        if self.dx == 64:
+	            self.walking = False
+	            self.setSprite()    
+	            self.dx = 0
+
+	        game.tilemap.set_focus(self.rect.x, self.rect.y)
+
+
+
+
+	   
+	        
+
+
+
+	   
+	    
 
 
 class SpriteLoop(pygame.sprite.Sprite):
@@ -308,6 +430,7 @@ class SpriteLoop(pygame.sprite.Sprite):
         self.frameCount = 0
         self.mspf = int(cell['mspf']) # milliseconds per frame
         self.timeCount = 0
+       
 
     def update(self, dt, game):
         self.timeCount += dt
@@ -320,8 +443,42 @@ class SpriteLoop(pygame.sprite.Sprite):
             self.frameCount += 1
             if self.frameCount == self.frames:
                 self.frameCount = 0
+
+class npcSprite(pygame.sprite.Sprite):
+	"""  Trying to make npc class   
+		src - the source of the image that contains the sprites
+	"""
+	
+	def __init__(self, location, cell, *groups):
+		super(npcSprite, self).__init__(*groups)
+		self.image = pygame.image.load(cell['src'])
+		self.defaultImage = self.image.copy()
+		self.width = int(cell['width'])
+		self.height = int(cell['height'])
+		self.rect = pygame.Rect(location, (self.width,self.height))
+		self.timeCount = 0
+		self.direction = 'left'
+		self.location = location
+		self.currLocation = location
+		self.pacing = 0
+		self.pause = False
+		if cell['hasInteraction'] == 'true':
+			self.hasInteraction = True
+		else:
+			self.hasInteraction = False
+
+
+
+	def update(self, dt, game):
+		pacingUpdate(self, dt, game)
+
+
+	
+
+    
         
 class Game(object):
+
     def __init__(self, screen):
         self.screen = screen
         self.save = []
@@ -334,6 +491,7 @@ class Game(object):
         playLoop = True
         while playLoop:
             dt = clock.tick(30)
+            print ('dt = ' + dt)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -373,10 +531,16 @@ class Game(object):
         print (type(self.tilemap.layers))
         self.players = tmx.SpriteLayer()
         self.objects = tmx.SpriteLayer()
+        self.sprites = []
         # Initializing other animated sprites
         try:
             for cell in self.tilemap.layers['sprites'].find('src'):
                 SpriteLoop((cell.px,cell.py), cell, self.objects)
+            for cell in self.tilemap.layers['npcSprites'].find('src'):
+            	self.sprites.append(npcSprite((cell.px,cell.py), cell, self.objects))
+            	print ('in the npcSprites')
+
+
         # In case there is no sprite layer for the current map
         except KeyError:
             pass
@@ -494,6 +658,7 @@ class Game(object):
             while playLoop:
                 dt = clock.tick(30)
 
+
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         return
@@ -519,19 +684,29 @@ class Game(object):
             gameDisplay.fill((40, 0, 40))
 
         def hldfunction(filename):
-            path = os.getcwd() + '/SaveFiles/' + filename 
-            fileRead = open(path, 'r')
-            hldString = ""
+        	if(filename == 'NewBlankGame'):
+        		self.save = ['newGameSave.txt','test3.tmx','other','notChanged','in','here']
+        	else:
 
-            for line in fileRead:
-                hldString += line
-            
-            self.save = hldString.split(',')
-            
-            print ('oh over here')
-            print (self.save)
+	            path = os.getcwd() + '/SaveFiles/' + filename 
+	            fileRead = open(path, 'r')
+	            hldString = ""
 
-            play_function()
+	            for line in fileRead:
+	                hldString += line
+	            
+	            self.save = hldString.split(',')
+	            
+	            print ('oh over here')
+	            print (self.save)
+
+	        print ('here')
+	        play_function()
+
+	        print ('heregain')
+
+            
+
 
 
         newgameMenu = pygameMenu.Menu(gameDisplay,
@@ -594,7 +769,7 @@ class Game(object):
         mainMenu.add_option(newgameMenu.get_title(), newgameMenu)
         mainMenu.add_option(loadgameMenu.get_title(), loadgameMenu)
         newgameMenu.add_option('Return to Menu', PYGAME_MENU_BACK)
-        newgameMenu.add_option('New Game', play_function)
+        newgameMenu.add_option('New Game', hldfunction, 'NewBlankGame')
         loadgameMenu.add_option('Return to Menu', PYGAME_MENU_BACK)
         
         # loadgameMenu.add_option('Load Game',hldfunction)
