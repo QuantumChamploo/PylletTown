@@ -19,17 +19,9 @@ COLOR_MAROON =  (40, 0, 40)
 MENU_BACKGROUND_COLOR = (228, 55, 36)
 
 
-menuSets = [
 
 
 
-
-
-
-
-
-
-]
 
 
 
@@ -103,41 +95,139 @@ def text_objects(text, font):
         return textSurface, textSurface.get_rect()
 
 def pacingUpdate(sprite, dt, game):
-	if sprite.pause == False:
+	if sprite.pace == True:
 		sprite.timeCount += dt
 
-	if sprite.direction == 'left':
-		if sprite.pause == False:
-			sprite.pacing -= dt/25
+		if sprite.direction == 'left' and dt < 65:
+			if sprite.pause == False:
+				sprite.pacing -= dt/25
 
-	if sprite.direction == 'right':
-		if sprite.pause == False:
-			sprite.pacing += dt/25
+		if sprite.direction == 'right' and dt < 65:
+			if sprite.pause == False:
+				sprite.pacing += dt/25
 
-	if sprite.pacing <= -150:
-		sprite.direction = 'right'
-		sprite.image = pygame.transform.flip(sprite.image, True, False)
+		if sprite.pacing <= -150:
+			sprite.direction = 'right'
+			sprite.image = pygame.transform.flip(sprite.image, True, False)
 
-	if sprite.pacing >= 150:
-		sprite.direction = 'left'
-		sprite.image = pygame.transform.flip(sprite.image, True, False)
+		if sprite.pacing >= 150:
+			sprite.direction = 'left'
+			sprite.image = pygame.transform.flip(sprite.image, True, False)
 
-	sprite.currLocation = (sprite.location[0] + sprite.pacing, sprite.location[1])
+		sprite.currLocation = (sprite.location[0] + sprite.pacing, sprite.location[1])
+		
 
-	sprite.rect = pygame.Rect(sprite.currLocation, (sprite.width,sprite.height))
+		sprite.rect = pygame.Rect((sprite.location[0] + sprite.pacing, sprite.location[1]), (sprite.width,sprite.height))
+
+
+
+class spriteMove():
+	def __init__(self, paces, direction):
+		self.totalMoves = paces*16 + 1
+		self.movesLeft = paces*16 + 1
+		self.direction = direction
+
+	def resetMoves(self):
+		self.movesLeft = self.totalMoves
+
+	def hasMoves(self):
+		if self.movesLeft == 0:
+			return False
+		else:
+			return True
+	def decrementMoves(self):
+		self.movesLeft -= 1
+
+
+class cutScene():
+	def __init__(self, moves):
+
+		self.moves = moves
+		
+		
+		self.first = moves[0]
+		self.last = moves[len(moves)-1]
+		self.curr = self.first
+		self.currPlace = 0
+
+
+	def hasNextMove(self):
+		if self.curr == self.last and not self.curr.hasMoves():
+			return False
+		else:
+			return True
+
+
+	def verifyCurrentMove(self):
+		if not self.curr.hasMoves():
+			if self.curr == self.last: 
+				print ('something')
+				
+			else:
+				self.curr.resetMoves()
+				print (str(self.curr.totalMoves))
+				self.currPlace += 1
+				self.curr = self.moves[self.currPlace]
+
+	def decrementCurrMove(self):
+		self.curr.decrementMoves()
+
+						
+
+
+cutSceneDictionary = {'walking intro' : cutScene((spriteMove(5,'up'),spriteMove(1,'left')))}
+
+
+
 
 def cutsceneUpdate(player, dt, game, cutscene):
-	if cutscene == 'walking intro':
-		
-		player.hldy -= 4
-		if player.hldy >= -256:
-			player.rect.y -= 4
-			game.tilemap.set_focus(player.rect.x, player.rect.y)
+	hldScene = cutSceneDictionary[cutscene]
+	if hldScene.hasNextMove():
+		if hldScene.curr.movesLeft == hldScene.curr.totalMoves:
+			player.orient = hldScene.curr.direction
+			player.setSprite()
+			hldScene.decrementCurrMove()
+			player.dx = 0
+			player.step = 'rightFoot'
+
+
 		else:
-			player.inCutscene = False
-			player.hldy = 0
+
+			player.dx += 4
+			if player.dx == 32:
+				# Self.step keeps track of when to flip the sprite so that
+				# the character appears to be taking steps with different feet.
+				if (player.orient == 'up' or 
+					player.orient == 'down') and player.step == 'leftFoot':
+					player.image = pygame.transform.flip(player.image, True, False)
+					player.step = 'rightFoot'
+				else:
+					player.image.scroll(-64, 0)
+					player.step = 'leftFoot'
+			# After traversing 64 pixels, the walking animation is done
+			if player.dx == 64:
+				player.walking = False
+				player.setSprite()    
+				player.dx = 0
+
+			if hldScene.curr.direction == 'up':
+				player.rect.y -= 4
+			if hldScene.curr.direction == 'down':
+				player.rect.y += 4
+			if hldScene.curr.direction == 'left':
+				player.rect.x -= 4
+			if hldScene.curr.direction == 'right':
+				player.rect.y += 4	
+			hldScene.decrementCurrMove()	
+			hldScene.verifyCurrentMove()	
+
+
 
 	else:
+		for move in hldScene.moves:
+			move.resetMoves()
+		hldScene.currPlace = 0
+		hldScene.curr = hldScene.first
 		
 		player.inCutscene = False
 
@@ -180,7 +270,7 @@ class Player(pygame.sprite.Sprite):
             self.image.scroll(0, -192)
         
     def update(self, dt, game):
-        aCounter = 0
+        
 
         key = pygame.key.get_pressed()
         if self.inCutscene == True:
@@ -189,7 +279,7 @@ class Player(pygame.sprite.Sprite):
 
         # Setting orientation and sprite based on key input: 
 
-        if self.inCutscene == False:
+        else:
 	
 
 	        if key[pygame.K_UP]:
@@ -198,8 +288,7 @@ class Player(pygame.sprite.Sprite):
 	                    self.orient = 'up'
 	                    self.setSprite()
 	                self.holdTime += dt
-	                if(aCounter < 5):
-	                    aCounter += 1
+	                
 	        elif key[pygame.K_DOWN]:
 	            if not self.walking:
 	                if self.orient != 'down':
@@ -234,8 +323,8 @@ class Player(pygame.sprite.Sprite):
 
 	                for sprite in game.sprites:
 	                	if sprite.hasInteraction == True:
-	                		if abs(sprite.currLocation[0] - self.rect.x) < 10:
-	                			if abs(sprite.currLocation[1] - self.rect.y) < 10:
+	                		if abs(sprite.currLocation[0] - self.rect.x) < 20:
+	                			if abs(sprite.currLocation[1] - self.rect.y) < 20:
 	                				hld = sprite.pacing
 	                				print (sprite.currLocation)
 	                				sprite.pause = True
@@ -281,7 +370,9 @@ class Player(pygame.sprite.Sprite):
 	               		gameDisplay = pygame.display.set_mode((800,600))
 	               		entryCell = game.tilemap.layers['interactions'].find('event')[0]
 	               		self.whichCutscene = str(entryCell['event'])
+
 	               		self.inCutscene = True
+	               		print (str(entryCell['event']))
 	               		print (self.inCutscene)
 
 
@@ -460,12 +551,21 @@ class npcSprite(pygame.sprite.Sprite):
 		self.direction = 'left'
 		self.location = location
 		self.currLocation = location
+
 		self.pacing = 0
 		self.pause = False
+		self.name = cell['name']
+		
 		if cell['hasInteraction'] == 'true':
 			self.hasInteraction = True
-		else:
+		if cell['hasInteraction'] == 'false':
 			self.hasInteraction = False
+		if cell['pace'] == 'true':
+			self.pace = True
+		if cell['pace'] == 'false':
+			self.pace = False
+		
+			
 
 
 
