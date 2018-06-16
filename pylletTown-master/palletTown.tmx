@@ -110,7 +110,7 @@
  </layer>
  <layer name="interactions" width="40" height="36">
   <data encoding="base64" compression="zlib">
-   eJztzjkKACEABEFF3f+/2Csz2FRUqAqGCTsEAAAAAIB96vLbnHgo5EcaLXnpKeN/F/W9rgMb+wIV
+   eJztzjEOgCAMQFGMwv0vLFK3DqwGTN5L2rTbLwUAAAAA4Bt3TE//865jTcvMGS1X6qlxt436/m4AFhkDEg==
   </data>
  </layer>
  <layer name="foreground" width="40" height="36">

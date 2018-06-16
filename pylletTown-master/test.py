@@ -1,6 +1,6 @@
-print ('hello')
-import glob
-import os
-path = os.getcwd() + '/SaveFiles'
-for filename in os.listdir(path):
-	print (filename)
+dic1 = {'all' : ('ball', 'other'), 'cock' : ('dick')}
+dic2 = {'one': ('ball','dick')}
+
+for items in dic1['all']:
+	print (items)
+

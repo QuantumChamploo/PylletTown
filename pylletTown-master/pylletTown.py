@@ -176,13 +176,57 @@ class cutScene():
 
 
 cutSceneDictionary = {'walking intro' : cutScene((spriteMove(5,'up'),spriteMove(1,'left')))}
+npcSceneCast = {'guided tour': ('smellyboy', 'other'), 'walking intro': ('smellyboy','other')}
+npcSceneDictionary = {('guided tour', 'smellyboy') : cutScene((spriteMove(1,'up'),spriteMove(1,'left'))), ('walking intro', 'smellyboy') : cutScene((spriteMove(1,'up'),spriteMove(1,'left'))) }
 
-
+def npcUpdate(spriteName, sprite, dt, game, cutscene):
+	hldScene = npcSceneDictionary[(cutscene, spriteName)]
+	if hldScene.hasNextMove():
+		if hldScene.curr.direction == 'up':
+			sprite.rect.y -= 4
+		if hldScene.curr.direction == 'down':
+			sprite.rect.y += 4
+		if hldScene.curr.direction == 'left':
+			sprite.rect.x -= 4
+		if hldScene.curr.direction == 'right':
+			sprite.rect.y += 4	
+		hldScene.decrementCurrMove()	
+		hldScene.verifyCurrentMove()	
 
 
 def cutsceneUpdate(player, dt, game, cutscene):
-	hldScene = cutSceneDictionary[cutscene]
-	if hldScene.hasNextMove():
+	# the cast and dictionary for the npcs r almost set up to do multiple npcs at a time, but
+	# was having issues iterating through dictionary values, so left it simple for now
+	try:
+		hldScene = cutSceneDictionary[cutscene]
+		playerBool = hldScene.hasNextMove()
+		skipReset = False
+	except KeyError:
+		playerBool = False
+		skipReset = True
+
+	if len(npcSceneCast[cutscene]) == 0:
+		skipNpcReset = True
+	else:
+		skipNpcReset = False
+	for sprite in game.sprites:
+		if sprite.name in npcSceneCast[cutscene]:
+
+			if npcSceneDictionary[(cutscene, sprite.name)].hasNextMove():
+				npcBool = True
+			else:
+				npcBool = False
+
+
+
+	if npcBool:
+		for sprite in game.sprites:
+			if sprite.name in npcSceneCast[cutscene]:
+
+				npcUpdate(sprite.name, sprite, dt, game, cutscene)
+
+
+	if playerBool:
 		if hldScene.curr.movesLeft == hldScene.curr.totalMoves:
 			player.orient = hldScene.curr.direction
 			player.setSprite()
@@ -219,16 +263,25 @@ def cutsceneUpdate(player, dt, game, cutscene):
 			if hldScene.curr.direction == 'right':
 				player.rect.y += 4	
 			hldScene.decrementCurrMove()	
-			hldScene.verifyCurrentMove()	
+			hldScene.verifyCurrentMove()
+			game.tilemap.set_focus(player.rect.x, player.rect.y)	
 
 
 
-	else:
-		for move in hldScene.moves:
-			move.resetMoves()
-		hldScene.currPlace = 0
-		hldScene.curr = hldScene.first
-		
+	if not (playerBool or npcBool):
+		if not skipReset:
+			for move in hldScene.moves:
+				move.resetMoves()
+			hldScene.currPlace = 0
+			hldScene.curr = hldScene.first
+		if not skipNpcReset:
+			for spriteName in npcSceneCast[cutscene]:
+				if spriteName != 'other':
+					for move in npcSceneDictionary[(cutscene,spriteName)].moves:
+						move.resetMoves()
+					npcSceneDictionary[(cutscene,spriteName)].currPlace = 0
+					npcSceneDictionary[(cutscene,spriteName)].curr = npcSceneDictionary[(cutscene,spriteName)].first
+		print ("LEFT THE CUTSCENE")
 		player.inCutscene = False
 
 
@@ -368,7 +421,7 @@ class Player(pygame.sprite.Sprite):
 	               													'event')) > 0:
 	               		clock = pygame.time.Clock()
 	               		gameDisplay = pygame.display.set_mode((800,600))
-	               		entryCell = game.tilemap.layers['interactions'].find('event')[0]
+	               		entryCell = game.tilemap.layers['interactions'].collide(self.rect,'event')[0]
 	               		self.whichCutscene = str(entryCell['event'])
 
 	               		self.inCutscene = True
