@@ -95,6 +95,15 @@
     <property name="width" value="32"/>
    </properties>
   </tile>
+  <tile id="3">
+   <properties>
+    <property name="frames" type="int" value="4"/>
+    <property name="height" type="int" value="32"/>
+    <property name="mspf" type="int" value="350"/>
+    <property name="src" value="sprites/flower2.png"/>
+    <property name="width" type="int" value="32"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="189" source="asdf.tsx"/>
  <tileset firstgid="253" source="interactions.tsx"/>
@@ -120,10 +129,10 @@
  </layer>
  <layer name="sprites" width="40" height="36">
   <data encoding="base64" compression="zlib">
-   eJzt1NEJACAIQEH33ydarwmkIsiCOxB/H34YAQAAwKo+2ZVebgP+15LJ3P5JO30V/3L3frfpO6MvNwD0GCkj
+   eJzt0UEKgDAMRcHc/z6ix+vSjSGWSO1iBkq2j98IAAAA3rqK+6ed27j5jx779XT2O5KXOYv7tZm+1W3x0FXtt5q+Hn25AZCrK1M=
   </data>
  </layer>
- <layer name="npcSprites" width="40" height="36" visible="0">
+ <layer name="npcSprites" width="40" height="36">
   <data encoding="base64" compression="zlib">
    eJztzrENwCAMAEH2X5K00CQtVHgB3FqK7qTvvzUAAAAgM6JZPZFY0a6eALjo0VM9kXijr3rixw5M6Adl
   </data>

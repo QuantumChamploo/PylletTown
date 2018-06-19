@@ -24,11 +24,11 @@
  <tile id="34">
   <properties>
    <property name="hasInteraction" value="true"/>
-   <property name="height" value="68"/>
+   <property name="height" value="64"/>
    <property name="name" value="smellyboy"/>
    <property name="pace" value="false"/>
-   <property name="src" value="sprites/maxsprite.png"/>
-   <property name="width" value="43"/>
+   <property name="src" value="sprites/tazz.png"/>
+   <property name="width" value="64"/>
   </properties>
  </tile>
  <tile id="38">
@@ -47,8 +47,8 @@
    <property name="height" value="64"/>
    <property name="name" value="mssnglyph"/>
    <property name="pace" value="true"/>
-   <property name="src" value="sprites/mssnglyph.png"/>
-   <property name="width" value="32"/>
+   <property name="src" value="sprites/profglyph.png"/>
+   <property name="width" value="64"/>
   </properties>
  </tile>
  <tile id="54">
