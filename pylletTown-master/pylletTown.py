@@ -391,14 +391,9 @@ def cutsceneUpdate(player, dt, game, cutscene):
 		print ("LEFT THE CUTSCENE")
 		player.inCutscene = False
 
-																							"""
 
-																							**********
-																							* Player Class
-																							**********
-
-																							"""
 class Player(pygame.sprite.Sprite):
+
 	def __init__(self, location, orientation, *groups):
 		super(Player, self).__init__(*groups)
 		self.image = pygame.image.load('sprites/profglyph.png')
@@ -685,26 +680,7 @@ class Player(pygame.sprite.Sprite):
 		    game.tilemap.set_focus(self.rect.x, self.rect.y)
 
 
-																							"""
-
-																							**********
-																							* SpriteLoop Class
-																							**********
-
-																							"""
 class SpriteLoop(pygame.sprite.Sprite):
-																					    """A simple looped animated sprite.
-																					    
-																					    SpriteLoops require certain properties to be defined in the relevant
-																					    tmx tile:
-																					    
-																					    src - the source of the image that contains the sprites
-																					    width, height - the width and height of each section of the sprite that
-																					        will be displayed on-screen during animation
-																					    mspf - milliseconds per frame, or how many milliseconds must pass to 
-																					        advance onto the next frame in the sprite's animation 
-																					    frames - the number individual frames that compose the animation
-																					    """
     def __init__(self, location, cell, *groups):
         super(SpriteLoop, self).__init__(*groups)
         self.image = pygame.image.load(cell['src'])
@@ -730,13 +706,6 @@ class SpriteLoop(pygame.sprite.Sprite):
             if self.frameCount == self.frames:
                 self.frameCount = 0
 
-																							"""
-
-																							**********
-																							* npcSprite Class
-																							**********
-
-																							"""
 class npcSprite(pygame.sprite.Sprite):
 	"""  Trying to make npc class   
 		src - the source of the image that contains the sprites
@@ -791,13 +760,6 @@ class npcSprite(pygame.sprite.Sprite):
 		elif self.orient == 'right':
 		    self.image.scroll(0, -192)		
 
-																							"""
-
-																							**********
-																							GAME CLASS
-																							**********
-
-																							"""
 class Game(object):
 
     def __init__(self, screen):
@@ -831,7 +793,7 @@ class Game(object):
 
     
     def fadeOut(self):
-        																	"""Animate the screen fading to black for entering a new area"""
+        																	
         clock = pygame.time.Clock()
         blackRect = pygame.Surface(self.screen.get_size())
         blackRect.set_alpha(100)
@@ -848,7 +810,7 @@ class Game(object):
         																		# *** *** ***
     def initArea(self, mapFile):												# initArea
 																				# *** *** ***
-																				"""Load maps and initialize sprite layers for each new area"""
+																				
         self.tilemap = tmx.load(mapFile, screen.get_size())
         print (type(self.tilemap.layers))
         self.players = tmx.SpriteLayer()
@@ -894,7 +856,7 @@ class Game(object):
     def initMenu(self):
         """"create generic menu for in game    """
         
-        gameDisplay = pygame.Surface((400,600))
+        gameDisplay = pygame.display.set_mode((800,600))
 
 
 
