@@ -52,20 +52,23 @@ def pacingUpdate(sprite, dt, game):
 
 class scrollText():
 	def __init__(self, inputText):
-		self.stringList = []
-		for value in inputText:
-			self.stringList.append(value)
-		self.currPlace = 0 
+		self.stringList = inputText.split(' ')
+
 		self.counter = 0
-		self.length = len(inputText)
+		self.length = len(self.stringList)
 		self.top = ''
 		self.bottom = ''
 		self.level = 'top'
+		self.wait = 0
+		self.nextScreen = False
+		self.pause = False
 		
 
 
 	def resetPlace(self):
-		self.currPlace = 0
+		self.counter = 0
+		self.top = ''
+		self.bottom = ''
 
 	def hasnextLetter(self):
 		if self.counter  == self.length:
@@ -80,24 +83,43 @@ class scrollText():
 
 	def updateScroll(self):
 		if self.hasnextLetter():
+			if self.wait == 0:
 
-			if self.counter == 12:
-				if self.level == 'top':
-					self.level == 'bottom'
-				if self.level == 'bottom':
-					self.level == 'top'
-					self.top = ''
+				if self.counter == 0:
+					self.level = 'top'
+
+				elif self.counter % 6 == 0:
+					if self.level == 'top':
+						self.level = 'bottom'
+					elif self.level == 'bottom':
+						self.pause = True
+						if self.nextScreen == True:
+							print (self.nextScreen)
+
+							self.level = 'top'
+							self.top = ''
+							self.bottom = ''
+							self.nextScreen = False
+							self.pause = False
+					
+				if self.pause == False:
+					if self.level == 'top':
+						self.top += self.nextLetter() + " "
+					if self.level == 'bottom':
+						self.bottom += self.nextLetter() + " "
+
+					self.increment()
 				
-			
-			if self.level == 'top':
-				self.top += self.stringList[self.counter]
-			if self.level == 'bottom':
-				self.bottom += self.stringList[self.counter]
-			self.increment()
+			else:
+				self.wait += 1
+				if self.wait >= 15:
+					self.wait = 0
 
 
 
-textBoxDictionary = {'Prof Glyph': scrollText('Aye, fuck off mate I really want this dumb text stuff to work')}
+textBoxDictionary = {'Prof Glyph': scrollText('Aye, fuck off mate I really want this dumb text stuff to work'),
+					'Unlock SuperWaveDashing': scrollText('Congratulations! you are about to get super wavedashing! Press x to obtain it, and s to leave the menu')}
+
 
 def textUpdate(gameDisplay, textScript, game):
 	hldScroll = textBoxDictionary[textScript]
@@ -107,8 +129,8 @@ def textUpdate(gameDisplay, textScript, game):
 	largeText = pygame.font.Font('freesansbold.ttf',35)
 	TextSurf, TextRect = text_objects(hldScroll.top, largeText)
 	TextSurf2, TextRect2 = text_objects(hldScroll.bottom, largeText)
-	TextRect.center = ((300),(510))
-	TextRect2.center = ((300),(530))
+	TextRect.center = ((400),(520))
+	TextRect2.center = ((400),(570))
 	textBoxImage = pygame.image.load('smallTextBox.png')
 
 
@@ -116,6 +138,7 @@ def textUpdate(gameDisplay, textScript, game):
 	gameDisplay.blit(textBoxImage, (25,480))
 	gameDisplay.blit(TextSurf, TextRect)
 	gameDisplay.blit(TextSurf2, TextRect2)	
+
 	
 
 
@@ -214,20 +237,25 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			sprite.rect.x -= 4
 		if hldScene.curr.direction == 'right':
 			sprite.rect.y += 4	
+		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
 		hldScene.decrementCurrMove()	
 		hldScene.verifyCurrentMove()
 			
 
 def wavedashUpdate(player, game):
 	lastRect = player.rect.copy()
-	if player.hldx < 64:
+	if game.save[4] == 'R WE WAVEDASHING':
+		maxHld = 128
+	else:
+		maxHld = 64
+	if player.hldx < maxHld:
 		
 		if player.orient == 'right':
-			player.rect.x += 8
-			player.hldx += 8
+			player.rect.x += 16
+			player.hldx += 16
 		if player.orient == 'left':
-			player.rect.x -= 8
-			player.hldx += 8
+			player.rect.x -= 16
+			player.hldx += 16
 		if player.orient == 'up':
 			player.hldx = 0
 			player.waveDashing = False
@@ -241,10 +269,16 @@ def wavedashUpdate(player, game):
 
 		game.tilemap.set_focus(player.rect.x, player.rect.y)
 
+		if player.hldx == maxHld:
+			player.waveDashing = False
+			player.hldx = 0
+			player.bool = False
+			# delete the above and below bool to make super waveDashing!!
 	else:
 
 		player.hldx = 0
 		player.waveDashing = False
+		player.bool = False
 
 
 
@@ -260,7 +294,8 @@ def jumpingUpdate(player):
 		player.hldy += 4
 	else:
 		player.hldy = 0
-		player.jumping = False		
+		player.jumping = False
+		player.bool = False		
 
 
 
@@ -371,6 +406,7 @@ class Player(pygame.sprite.Sprite):
 		self.hldy = 0;
 		self.jumping = False
 		self.waveDashing = False
+		self.bool = False
 
 
 		# Set default orientation
@@ -396,18 +432,31 @@ class Player(pygame.sprite.Sprite):
 
 		if self.inCutscene == True:
 			cutsceneUpdate(self, dt, game, self.whichCutscene)
+			self.jumping = False
+			self.waveDashing = False
+			self.bool = False
 
-		if self.jumping == True:
-			if key[pygame.K_e] and key[pygame.K_r] and self.hldy >27:
+		if self.jumping == True and self.bool == True:
+			if key[pygame.K_e] and key[pygame.K_r] and 37 > self.hldy > 27:
 	
 				self.waveDashing = True
 				
 			jumpingUpdate(self)
 
+		if self.jumping == True and self.waveDashing == False:
+			if key[pygame.K_w]:
+				if self.hldy > 32:
+					self.hldy -= 32
+				hld = self.hldy % 8
+				self.rect.y += hld
+				self.jumping = False
+				self.hldy = 0
+
+
 		if self.waveDashing == True:
 			
 			wavedashUpdate(self, game)
-			print ('im wave dashing')
+			
 
 
 
@@ -444,6 +493,7 @@ class Player(pygame.sprite.Sprite):
 		            self.holdTime += dt
 		    elif key[pygame.K_e]:
 		    	self.jumping = True
+		    	self.bool = True
 		    elif key[pygame.K_a] and not self.walking:
 		        if not self.walking:
 		            lastRect2 = self.rect.copy()
@@ -482,6 +532,7 @@ class Player(pygame.sprite.Sprite):
 		            							pygameMenu.quit()
 		            							quit()
 		            						if event.type == pygame.KEYUP and event.key == pygame.K_s:
+		            							hldText = textBoxDictionary['Prof Glyph'].resetPlace()
 		            							displaying = False
 
 
@@ -518,7 +569,8 @@ class Player(pygame.sprite.Sprite):
 		                gameDisplay = pygame.display.set_mode((800,600))  
 		                thisImage = pygame.image.load('uujihyugtguyh.png')
 		                game.save[3] = 'CHANGED'
-		               
+		                signCell = game.tilemap.layers['actions'].collide(self.rect, 'sign')[0]
+		                
 
 		                displaying = True
 
@@ -540,26 +592,26 @@ class Player(pygame.sprite.Sprite):
 		                        if event.type == pygame.QUIT:
 		                            pygame.quit()
 		                            quit()
+
+		                        if event.type == pygame.KEYUP and event.key == pygame.K_z:
+		                        	hldText = textBoxDictionary[str(signCell['sign'])].nextScreen = True
+		                        	
 		                        if event.type == pygame.KEYUP and event.key == pygame.K_s:
+		                            hldText = textBoxDictionary[str(signCell['sign'])].resetPlace()
 		                            displaying = False
-		                    #gameDisplay.fill(red)    
-		                    # gameDisplay.blit(thisImage, (100, 0))
-		                    
-		                    #gameDisplay.blit(currState, (0,0))
-		                    largeText = pygame.font.Font('freesansbold.ttf',35)
-		                    TextSurf, TextRect = text_objects('press s to leave interaction', largeText)
-		                    TextRect.center = ((300),(510))
-		                    textBoxImage = pygame.image.load('smallTextBox.png')
-		                    
-		                    game.tilemap.draw(game.screen)
-		                    gameDisplay.blit(textBoxImage, (25,480))
-		                    gameDisplay.blit(TextSurf, TextRect)
+		                        if event.type == pygame.KEYUP and event.key == pygame.K_x:
+		                            displaying = False
+		                            game.save[4] = 'R WE WAVEDASHING'
 
+		                        
+
+
+		                    textUpdate(gameDisplay, str(signCell['sign']),game)
 		                    pygame.display.flip()
-		                    clock.tick(15)  
-		                    
+		                    clock.tick(7)  
+		                hldText = textBoxDictionary[str(signCell['sign'])].nextScreen = False    
 		            self.rect = lastRect2
-
+		           
 		    else:
 
 		        self.holdTime = 0
@@ -582,9 +634,18 @@ class Player(pygame.sprite.Sprite):
 		    # Collision detection:
 		    # Reset to the previous rectangle if player collides
 		    # with anything in the foreground layer
+		    for sprite in game.sprites:
+		    	if abs(sprite.currLocation[0] - self.rect.x) < 64:
+		    		if abs(sprite.currLocation[1] - self.rect.y) < 64:
+		    			self.rect = lastRect
 		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'solid')) > 0:
 		        self.rect = lastRect
+		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
+		                                                    'waveDashable')) > 0:
+		        self.rect = lastRect
+
+
 		    # Area entry detection:
 		    elif len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'entry')) > 0:
@@ -805,7 +866,10 @@ class Game(object):
 
     def initMenu(self):
         """"create generic menu for in game    """
-        gameDisplay = pygame.display.set_mode((800,600))
+        
+        gameDisplay = pygame.Surface((400,600))
+
+
 
         stillOn = True
 

@@ -2,9 +2,11 @@
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="fjfjfjf.tsx"/>
  <tileset firstgid="13" source="asdf.tsx"/>
- <layer name="triggers" width="100" height="100" visible="0">
+ <tileset firstgid="77" source="mushy.tsx"/>
+ <tileset firstgid="97" source="gamingCabinets.tsx"/>
+ <layer name="triggers" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1sEKwjAURcEoRoX6/99rCnkQpBFXL0Jn4O66KDmUtBQAAAAAAAAAAAAAAAAAAAAAIEttu/exzthh32vt65zO5/lHg3HkiR7j+d/6tqJHtugx0mOdox4herjT8/zSwzeS51uPoEcePf5L9Li0XSfP6JGn9j3anpNn9Miz39nxjdSD+efNF2e+TaYHAAAAAAAAAAAAAAAAAAAAAHBmb3FAAmg=
+   eJzt1ksKwjAUhtEoVoW6Sd/ufwWm0As1VGfeCp4D/8ROJB+hLQUAAAAAAAAAAAAAAAAAAAAAyNLVbcexnGmHYYdl/87fac8/GkxHnugxPf/NuL7okS16HOtO4296LCd6XOtuzbPo4Z2eJ3rMiR7uSJ5PPYIeefT4LdFjVbdunp3rLuW1h3fJd3XjdnX75tm97lHcj0zDOzvuSDcz37z54sz7N9MDAAAAAAAAAAAAAAAAAAAAAPhnTx6DBZI=
   </data>
  </layer>
  <layer name="interactions" width="100" height="100">
@@ -20,6 +22,11 @@
  <layer name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt1DtuAkEQRdHZAH9SMMZO+eaAx/tfFA8JiZZF4Gg66HOkq0pLParpOgAAAAAAAAAAAAAAAAAAAACA9szSPC3SsvIurSrf/zNt01f6rrlUw8r3n6RpGqVxzaUadkrnZx9pk1ZpXXGnlvXpkI7F3KV9zaUa9vget/RTzEu61lupaafu9c/6Oxle/+z3zWR45U24j/rKm3AfAAAAAAAAAAAAAAAAAAAAAADAf9wBzP4MHA==
+  </data>
+ </layer>
+ <layer name="foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0cENgDAMBEG3CgRC/xXEfNKCjTQj3X+liwAAAAAAAAAAAAAAAAAAAAAAAKCTI3dWR7Dduac6An7kyo3qCLYZ/ujEH718f7zVEQAAAAAAAAAAAAAAAAAAAAAAQFsL9qQEuw==
   </data>
  </layer>
 </map>
