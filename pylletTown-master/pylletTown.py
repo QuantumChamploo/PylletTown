@@ -109,10 +109,11 @@ class scrollText():
 						self.bottom += self.nextLetter() + " "
 
 					self.increment()
+					self.wait += 1
 				
 			else:
 				self.wait += 1
-				if self.wait >= 15:
+				if self.wait >= 1:
 					self.wait = 0
 
 
@@ -611,7 +612,7 @@ class Player(pygame.sprite.Sprite):
 		                    clock.tick(7)  
 		                hldText = textBoxDictionary[str(signCell['sign'])].nextScreen = False    
 		            self.rect = lastRect2
-		           
+
 		    else:
 
 		        self.holdTime = 0
