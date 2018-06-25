@@ -31,6 +31,14 @@
    <property name="width" value="64"/>
   </properties>
  </tile>
+ <tile id="36">
+  <properties>
+   <property name="height" value="64"/>
+   <property name="saveIndex" type="int" value="5"/>
+   <property name="src" value="sprites/smokeyTree.png"/>
+   <property name="width" value="64"/>
+  </properties>
+ </tile>
  <tile id="38">
   <properties>
    <property name="sign" value="heytoo"/>

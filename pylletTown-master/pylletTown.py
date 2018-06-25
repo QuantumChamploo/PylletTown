@@ -396,7 +396,7 @@ class Player(pygame.sprite.Sprite):
 
 	def __init__(self, location, orientation, *groups):
 		super(Player, self).__init__(*groups)
-		self.image = pygame.image.load('sprites/profglyph.png')
+		self.image = pygame.image.load('sprites/slammy.png')
 		self.imageDefault = self.image.copy()
 		self.rect = pygame.Rect(location, (64,64))
 		self.orient = orientation 
@@ -430,7 +430,15 @@ class Player(pygame.sprite.Sprite):
 		    self.image.scroll(0, -192)
 
 	def update(self, dt, game):
+		try:
+			for cell in game.tilemap.layers['statebasedSprites'].find('src'):
 
+				if game.save[cell['saveIndex']] == 'true':
+					game.sprites.append(statebasedSprite((cell.px,cell.py), cell, game.objects))
+		except KeyError:
+			pass
+		else:
+			hld = 'hld'
 
 		key = pygame.key.get_pressed()
 
@@ -706,6 +714,24 @@ class SpriteLoop(pygame.sprite.Sprite):
             if self.frameCount == self.frames:
                 self.frameCount = 0
 
+
+class statebasedSprite(pygame.sprite.Sprite):
+	"""sprites that are game state dependent. Will read off the save file when intializing the sprites whether
+	the sprite should be rendered or not"""
+
+	def __init__(self, location, cell, *groups):
+
+		super(statebasedSprite, self).__init__(*groups)
+		self.image = pygame.image.load(cell['src'])
+		self.defaultImage = self.image.copy()
+		self.width = int(cell['width'])
+		self.height = int(cell['height'])
+		self.rect = pygame.Rect(location, (self.width,self.height))
+		self.location = location
+		self.currLocation = location
+		self.saveIndex = int(cell['saveIndex'])
+
+
 class npcSprite(pygame.sprite.Sprite):
 	"""  Trying to make npc class   
 		src - the source of the image that contains the sprites
@@ -822,7 +848,11 @@ class Game(object):
                 SpriteLoop((cell.px,cell.py), cell, self.objects)
             for cell in self.tilemap.layers['npcSprites'].find('src'):
             	self.sprites.append(npcSprite((cell.px,cell.py), cell,'down', self.objects))
-            	print ('in the npcSprites')
+            	print (cell['src'])
+            	print ('above is the src')
+
+            		
+
 
 
         # In case there is no sprite layer for the current map

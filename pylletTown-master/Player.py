@@ -1,0 +1,554 @@
+import pygame
+from cutScene import cutScene
+from statebasedSprite import statebasedSprite
+from SpriteLoop import SpriteLoop 
+from npcSprite import npcSprite
+from spriteMove import spriteMove
+from scrollText import scrollText
+
+
+
+black = (0,0,0)
+white = (255,255,255)
+red = (255,0,0)
+COLOR_BLUE = (12, 12, 200)
+COLOR_BACKGROUND = [128, 0, 128]
+COLOR_WHITE = (255, 255, 255)
+COLOR_BLACK = (0, 0, 0)
+COLOR_MAROON =  (40, 0, 40)
+MENU_BACKGROUND_COLOR = (228, 55, 36)
+
+
+""" 
+														These are dictionaries with key values associated with a particular cut scene or text box
+"""
+
+cutSceneDictionary = {'walking intro' : cutScene((spriteMove(5,'up'),spriteMove(1,'left')))}
+npcSceneCast = {'guided tour': ('smellyboy', 'other'), 'walking intro': ('smellyboy','other')}
+npcSceneDictionary = {('guided tour', 'smellyboy') : cutScene((spriteMove(1,'up'),spriteMove(1,'left'))), ('walking intro', 'smellyboy')
+																						 : cutScene((spriteMove(1,'up'),spriteMove(1,'left'))) }
+
+textBoxDictionary = {'Prof Glyph': scrollText('Aye, fuck off mate I really want this dumb text stuff to work'),
+					'Unlock SuperWaveDashing': scrollText('Congratulations! you are about to get super wavedashing! Press x to obtain it, and s to leave the menu')}
+
+
+""" 
+														Aux method used in processesing images to their text boxes
+"""
+
+def text_objects(text, font):
+        textSurface = font.render(text, True, black)
+        return textSurface, textSurface.get_rect()
+
+
+""" 
+														All of the types of updates a player or sprite might take
+"""
+def textUpdate(gameDisplay, textScript, game):
+	hldScroll = textBoxDictionary[textScript]
+	hldScroll.updateScroll()
+
+
+	largeText = pygame.font.Font('freesansbold.ttf',35)
+	TextSurf, TextRect = text_objects(hldScroll.top, largeText)
+	TextSurf2, TextRect2 = text_objects(hldScroll.bottom, largeText)
+	TextRect.center = ((400),(520))
+	TextRect2.center = ((400),(570))
+	textBoxImage = pygame.image.load('smallTextBox.png')
+
+
+	game.tilemap.draw(game.screen)
+	gameDisplay.blit(textBoxImage, (25,480))
+	gameDisplay.blit(TextSurf, TextRect)
+	gameDisplay.blit(TextSurf2, TextRect2)	
+
+	
+
+def npcUpdate(spriteName, sprite, dt, game, cutscene):
+	hldScene = npcSceneDictionary[(cutscene, spriteName)]
+	if hldScene.curr.movesLeft == hldScene.curr.totalMoves:
+		sprite.orient = hldScene.curr.direction
+		sprite.setSprite()
+		hldScene.decrementCurrMove()
+		sprite.dx = 0
+		sprite.step = 'rightFoot'
+	else:
+		sprite.dx += 4
+		if sprite.dx == 32:
+			# Self.step keeps track of when to flip the sprite so that
+			# the character appears to be taking steps with different feet.
+			if (sprite.orient == 'up' or 
+				sprite.orient == 'down') and sprite.step == 'leftFoot':
+				sprite.image = pygame.transform.flip(sprite.image, True, False)
+				sprite.step = 'rightFoot'
+			else:
+				sprite.image.scroll(-64, 0)
+				sprite.step = 'leftFoot'
+		# After traversing 64 pixels, the walking animation is done
+		if sprite.dx == 64:
+			
+			sprite.setSprite()    
+			sprite.dx = 0
+
+		if hldScene.curr.direction == 'up':
+			sprite.rect.y -= 4
+		if hldScene.curr.direction == 'down':
+			sprite.rect.y += 4
+		if hldScene.curr.direction == 'left':
+			sprite.rect.x -= 4
+		if hldScene.curr.direction == 'right':
+			sprite.rect.y += 4	
+		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
+		hldScene.decrementCurrMove()	
+		hldScene.verifyCurrentMove()
+			
+
+def wavedashUpdate(player, game):
+	lastRect = player.rect.copy()
+	if game.save[4] == 'R WE WAVEDASHING':
+		maxHld = 128
+	else:
+		maxHld = 64
+	if player.hldx < maxHld:
+		
+		if player.orient == 'right':
+			player.rect.x += 16
+			player.hldx += 16
+		if player.orient == 'left':
+			player.rect.x -= 16
+			player.hldx += 16
+		if player.orient == 'up':
+			player.hldx = 0
+			player.waveDashing = False
+		if player.orient == 'down':
+			player.hldx = 0
+			player.waveDashing = False								
+
+
+		if len(game.tilemap.layers['triggers'].collide(player.rect, 'solid')) > 0:
+			player.rect = lastRect
+
+		game.tilemap.set_focus(player.rect.x, player.rect.y)
+
+		if player.hldx == maxHld:
+			player.waveDashing = False
+			player.hldx = 0
+			player.bool = False
+			# delete the above and below bool to make super waveDashing!!
+	else:
+
+		player.hldx = 0
+		player.waveDashing = False
+		player.bool = False
+
+
+
+def jumpingUpdate(player):
+	for event in pygame.event.get():
+		if event.type == pygame.KEYUP and event.key == pygame.K_e:
+			print ("oh please let wavedaing work")
+	if player.hldy < 32:
+		player.rect.y -= 4
+		player.hldy += 4
+	elif 32 <= player.hldy < 64:
+		player.rect.y += 4
+		player.hldy += 4
+	else:
+		player.hldy = 0
+		player.jumping = False
+		player.bool = False		
+
+
+
+def cutsceneUpdate(player, dt, game, cutscene):
+	# the cast and dictionary for the npcs r almost set up to do multiple npcs at a time, but
+	# was having issues iterating through dictionary values, so left it simple for now
+	try:
+		hldScene = cutSceneDictionary[cutscene]
+		playerBool = hldScene.hasNextMove()
+		skipReset = False
+	except KeyError:
+		playerBool = False
+		skipReset = True
+
+	if len(npcSceneCast[cutscene]) == 0:
+		skipNpcReset = True
+	else:
+		skipNpcReset = False
+	for sprite in game.sprites:
+		if sprite.name in npcSceneCast[cutscene]:
+
+			if npcSceneDictionary[(cutscene, sprite.name)].hasNextMove():
+				npcBool = True
+			else:
+				npcBool = False
+
+
+
+	if npcBool:
+		for sprite in game.sprites:
+			if sprite.name in npcSceneCast[cutscene]:
+
+				npcUpdate(sprite.name, sprite, dt, game, cutscene)
+
+
+	if playerBool:
+		if hldScene.curr.movesLeft == hldScene.curr.totalMoves:
+			player.orient = hldScene.curr.direction
+			player.setSprite()
+			hldScene.decrementCurrMove()
+			player.dx = 0
+			player.step = 'rightFoot'
+
+
+		else:
+
+			player.dx += 4
+			if player.dx == 32:
+				# Self.step keeps track of when to flip the sprite so that
+				# the character appears to be taking steps with different feet.
+				if (player.orient == 'up' or 
+					player.orient == 'down') and player.step == 'leftFoot':
+					player.image = pygame.transform.flip(player.image, True, False)
+					player.step = 'rightFoot'
+				else:
+					player.image.scroll(-64, 0)
+					player.step = 'leftFoot'
+			# After traversing 64 pixels, the walking animation is done
+			if player.dx == 64:
+				player.walking = False
+				player.setSprite()    
+				player.dx = 0
+
+			if hldScene.curr.direction == 'up':
+				player.rect.y -= 4
+			if hldScene.curr.direction == 'down':
+				player.rect.y += 4
+			if hldScene.curr.direction == 'left':
+				player.rect.x -= 4
+			if hldScene.curr.direction == 'right':
+				player.rect.y += 4	
+			hldScene.decrementCurrMove()	
+			hldScene.verifyCurrentMove()
+			game.tilemap.set_focus(player.rect.x, player.rect.y)	
+
+
+
+	if not (playerBool or npcBool):
+		if not skipReset:
+			for move in hldScene.moves:
+				move.resetMoves()
+			hldScene.currPlace = 0
+			hldScene.curr = hldScene.first
+		if not skipNpcReset:
+			for spriteName in npcSceneCast[cutscene]:
+				if spriteName != 'other':
+					for move in npcSceneDictionary[(cutscene,spriteName)].moves:
+						move.resetMoves()
+					npcSceneDictionary[(cutscene,spriteName)].currPlace = 0
+					npcSceneDictionary[(cutscene,spriteName)].curr = npcSceneDictionary[(cutscene,spriteName)].first
+		print ("LEFT THE CUTSCENE")
+		player.inCutscene = False
+
+
+
+
+
+"""
+												The player class. Here is where the interaction between the game and player take place.
+												Contains the "master" update function, where all the above will be refenced
+"""
+class Player(pygame.sprite.Sprite):
+
+	def __init__(self, location, orientation, *groups):
+		super(Player, self).__init__(*groups)
+		self.image = pygame.image.load('sprites/slammy.png')
+		self.imageDefault = self.image.copy()
+		self.rect = pygame.Rect(location, (64,64))
+		self.orient = orientation 
+		self.holdTime = 0
+		self.walking = False
+		self.dx = 0
+		self.step = 'rightFoot'
+		self.inCutscene = False
+		self.whichCutscene = ''
+		self.hldx = 0;
+		self.hldy = 0;
+		self.jumping = False
+		self.waveDashing = False
+		self.bool = False
+
+
+		# Set default orientation
+		self.setSprite()
+        
+	def setSprite(self):
+		# Resets the player sprite sheet to its default position 
+		# and scrolls it to the necessary position for the current orientation
+		self.image = self.imageDefault.copy()
+		if self.orient == 'up':
+		    self.image.scroll(0, -64)
+		elif self.orient == 'down':
+		    self.image.scroll(0, 0)
+		elif self.orient == 'left':
+		    self.image.scroll(0, -128)
+		elif self.orient == 'right':
+		    self.image.scroll(0, -192)
+
+	def update(self, dt, game):
+		try:
+			for cell in game.tilemap.layers['statebasedSprites'].find('src'):
+
+				if game.save[cell['saveIndex']] == 'true':
+					game.sprites.append(statebasedSprite((cell.px,cell.py), cell, game.objects))
+		except KeyError:
+			pass
+		else:
+			hld = 'hld'
+
+		key = pygame.key.get_pressed()
+
+		if self.inCutscene == True:
+			cutsceneUpdate(self, dt, game, self.whichCutscene)
+			self.jumping = False
+			self.waveDashing = False
+			self.bool = False
+
+		if self.jumping == True and self.bool == True:
+			if key[pygame.K_e] and key[pygame.K_r] and 37 > self.hldy > 27:
+	
+				self.waveDashing = True
+				
+			jumpingUpdate(self)
+
+		if self.jumping == True and self.waveDashing == False:
+			if key[pygame.K_w]:
+				if self.hldy > 32:
+					self.hldy -= 32
+				hld = self.hldy % 8
+				self.rect.y += hld
+				self.jumping = False
+				self.hldy = 0
+
+
+		if self.waveDashing == True:
+			
+			wavedashUpdate(self, game)
+			
+
+
+
+
+
+        # Setting orientation and sprite based on key input: 
+
+		else:
+
+		    if key[pygame.K_UP]:
+		        if not self.walking:
+		            if self.orient != 'up':
+		                self.orient = 'up'
+		                self.setSprite()
+		            self.holdTime += dt
+		            
+		    elif key[pygame.K_DOWN]:
+		        if not self.walking:
+		            if self.orient != 'down':
+		                self.orient = 'down'
+		                self.setSprite()    
+		            self.holdTime += dt
+		    elif key[pygame.K_LEFT]:
+		        if not self.walking:
+		            if self.orient != 'left':
+		                self.orient = 'left'
+		                self.setSprite()
+		            self.holdTime += dt
+		    elif key[pygame.K_RIGHT]:
+		        if not self.walking:
+		            if self.orient != 'right':
+		                self.orient = 'right'
+		                self.setSprite()
+		            self.holdTime += dt
+		    elif key[pygame.K_e]:
+		    	self.jumping = True
+		    	self.bool = True
+		    elif key[pygame.K_a] and not self.walking:
+		        if not self.walking:
+		            lastRect2 = self.rect.copy()
+		            if self.orient == 'up':
+		                self.rect.y -= 8
+		            elif self.orient == 'down':
+		                self.rect.y += 8
+		            elif self.orient == 'left':
+		                self.rect.x -= 8
+		            elif self.orient == 'right':
+		                self.rect.x += 8
+		           # self.dx += 8
+
+		            for sprite in game.sprites:
+		            	if sprite.hasInteraction == True:
+		            		if abs(sprite.currLocation[0] - self.rect.x) < 20:
+		            			if abs(sprite.currLocation[1] - self.rect.y) < 20:
+		            				hld = sprite.pacing
+		            				print (sprite.currLocation)
+		            				sprite.pause = True
+		            				clock = pygame.time.Clock()
+		            				gameDisplay = pygame.display.set_mode((800,600))
+
+		            				displaying = True
+
+		            				while displaying:
+
+		            					for event in pygame.event.get():
+		            						if event.type == pygame.QUIT:
+		            							pygame.quit()
+		            							return
+		            						if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+		            							pygame.quit()
+		            							return
+		            						if event.type == pygame.QUIT:
+		            							pygameMenu.quit()
+		            							quit()
+		            						if event.type == pygame.KEYUP and event.key == pygame.K_s:
+		            							hldText = textBoxDictionary['Prof Glyph'].resetPlace()
+		            							displaying = False
+
+
+
+		            						
+
+		            						textUpdate(gameDisplay, 'Prof Glyph', game)
+		            						pygame.display.flip()
+
+		            						clock.tick(15)
+		            				print ('over heheheeh')
+		            				print (sprite.currLocation)
+		            				sprite.pause = False
+		            				sprite.pacing = hld
+
+	            		if abs(sprite.currLocation[0] - self.rect.x) < 8:
+	            			if abs(sprite.currLocation[1] - self.rect.y) < 8:
+	            				self.rect = lastRect2
+
+
+		            if len(game.tilemap.layers['interactions'].collide(self.rect,'event')) > 0:
+		           		clock = pygame.time.Clock()
+		           		gameDisplay = pygame.display.set_mode((800,600))
+		           		entryCell = game.tilemap.layers['interactions'].collide(self.rect,'event')[0]
+		           		self.whichCutscene = str(entryCell['event'])
+
+		           		self.inCutscene = True
+		           		print (str(entryCell['event']))
+		           		print (self.inCutscene)
+
+
+		            if len(game.tilemap.layers['actions'].collide(self.rect, 'sign')) > 0:
+		                clock = pygame.time.Clock()
+		                gameDisplay = pygame.display.set_mode((800,600))  
+		                thisImage = pygame.image.load('uujihyugtguyh.png')
+		                game.save[3] = 'CHANGED'
+		                signCell = game.tilemap.layers['actions'].collide(self.rect, 'sign')[0]
+		                
+
+		                displaying = True
+
+		                while displaying:
+		        
+		        
+		    
+		                    for event in pygame.event.get():
+		                        print(event)
+		                        if event.type == pygame.QUIT:
+		                             
+		                            pygame.quit()
+		                            return
+		                        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+		                            
+		                            pygame.quit()
+		                    
+		                            return 
+		                        if event.type == pygame.QUIT:
+		                            pygame.quit()
+		                            quit()
+
+		                        if event.type == pygame.KEYUP and event.key == pygame.K_z:
+		                        	hldText = textBoxDictionary[str(signCell['sign'])].nextScreen = True
+		                        	
+		                        if event.type == pygame.KEYUP and event.key == pygame.K_s:
+		                            hldText = textBoxDictionary[str(signCell['sign'])].resetPlace()
+		                            displaying = False
+		                        if event.type == pygame.KEYUP and event.key == pygame.K_x:
+		                            displaying = False
+		                            game.save[4] = 'R WE WAVEDASHING'
+
+		                        
+
+
+		                    textUpdate(gameDisplay, str(signCell['sign']),game)
+		                    pygame.display.flip()
+		                    clock.tick(7)  
+		                hldText = textBoxDictionary[str(signCell['sign'])].nextScreen = False    
+		            self.rect = lastRect2
+
+		    else:
+
+		        self.holdTime = 0
+		        self.step = 'rightFoot'
+		    # Walking mode enabled if a button is held for 0.1 seconds
+		    if self.holdTime >= 100:
+		        self.walking = True
+		    lastRect = self.rect.copy()
+		    # Walking at 8 pixels per frame in the direction the player is facing 
+		    if self.walking and self.dx < 64:
+		        if self.orient == 'up':
+		            self.rect.y -= 8
+		        elif self.orient == 'down':
+		            self.rect.y += 8
+		        elif self.orient == 'left':
+		            self.rect.x -= 8
+		        elif self.orient == 'right':
+		            self.rect.x += 8
+		        self.dx += 8
+		    # Collision detection:
+		    # Reset to the previous rectangle if player collides
+		    # with anything in the foreground layer
+		    for sprite in game.sprites:
+		    	if abs(sprite.currLocation[0] - self.rect.x) < 64:
+		    		if abs(sprite.currLocation[1] - self.rect.y) < 64:
+		    			self.rect = lastRect
+		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
+		                                                    'solid')) > 0:
+		        self.rect = lastRect
+		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
+		                                                    'waveDashable')) > 0:
+		        self.rect = lastRect
+
+
+		    # Area entry detection:
+		    elif len(game.tilemap.layers['triggers'].collide(self.rect, 
+		                                                    'entry')) > 0:
+		        entryCell = game.tilemap.layers['triggers'].find('entry')[0]
+		        print ("going to area" + str(entryCell['entry']))
+
+		        game.fadeOut()
+		        game.initArea(entryCell['entry'])
+		        
+		        return
+		    # Switch to the walking sprite after 32 pixels 
+		    if self.dx == 32:
+		        # Self.step keeps track of when to flip the sprite so that
+		        # the character appears to be taking steps with different feet.
+		        if (self.orient == 'up' or 
+		            self.orient == 'down') and self.step == 'leftFoot':
+		            self.image = pygame.transform.flip(self.image, True, False)
+		            self.step = 'rightFoot'
+		        else:
+		            self.image.scroll(-64, 0)
+		            self.step = 'leftFoot'
+		    # After traversing 64 pixels, the walking animation is done
+		    if self.dx == 64:
+		        self.walking = False
+		        self.setSprite()    
+		        self.dx = 0
+
+		    game.tilemap.set_focus(self.rect.x, self.rect.y)
