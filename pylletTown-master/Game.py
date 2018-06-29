@@ -69,7 +69,7 @@ class Game(object):
 																				# *** *** ***
 																				
         self.tilemap = tmx.load(mapFile, screen.get_size())
-        print (type(self.tilemap.layers))
+        
         self.players = tmx.SpriteLayer()
         self.objects = tmx.SpriteLayer()
         self.sprites = []
@@ -79,8 +79,11 @@ class Game(object):
                 SpriteLoop((cell.px,cell.py), cell, self.objects)
             for cell in self.tilemap.layers['npcSprites'].find('src'):
             	self.sprites.append(npcSprite((cell.px,cell.py), cell,'down', self.objects))
-            	print (cell['src'])
-            	print ('above is the src')
+            for cell in self.tilemap.layers['statebasedSprites'].find('src'):
+
+
+                if self.save[cell['saveIndex']] == 'true':
+                    self.sprites.append(statebasedSprite((cell.px,cell.py), cell, self.objects))
 
 
 
@@ -92,12 +95,11 @@ class Game(object):
             self.tilemap.layers.append(self.objects)
         try:
             hldSprites = self.tilemap.layers['removableSprites'].find('src')
-            print (len(hldSprites))
-            print (hldSprites)
+            
             for cell in hldSprites:
-                print ('found one!!!!!')
+               
                 self.sprites.append(removableSprite((cell.px,cell.py), cell, self.objects))
-                print ('did i find another?')
+              
                
 
         except KeyError:
@@ -113,7 +115,7 @@ class Game(object):
                              startCell['playerStart'], self.players)
         self.tilemap.layers.append(self.players)
         self.tilemap.set_focus(self.player.rect.x, self.player.rect.y) 
-        print ('left the loop')
+        
 
 
     def saveGame(self):
@@ -128,7 +130,7 @@ class Game(object):
 
         fileRead.write(hldString)
 
-        print (hldString)
+       
 
 
     def initMenu(self):
@@ -143,9 +145,9 @@ class Game(object):
         clock = pygame.time.Clock()
 
         def close_fun():
-            print (main_menu.is_disabled())
+        
             main_menu.disable()
-            print (main_menu.is_disabled())
+     
 
         def mainmenu_background():
             """Background color of the main menu, on this function user can plot
@@ -172,7 +174,7 @@ class Game(object):
                                     window_height=600,
                                     window_width=800
                                     )
-        print ('inside the game init menu')
+        
 
         main_menu.add_option('Save the Game', self.saveGame)
         main_menu.add_option('Close: Pressasdfg esc', PYGAME_MENU_CLOSE)
@@ -261,13 +263,12 @@ class Game(object):
 	            
 	            self.save = hldString.split(',')
 	            
-	            print ('oh over here')
-	            print (self.save)
+	            
 
-	        print ('here')
+	        
 	        play_function()
 
-	        print ('heregain')
+	        
 
             
 
@@ -366,7 +367,7 @@ class Game(object):
     def main(self):
         clock = pygame.time.Clock()
         self.initArea('test3.tmx')
-        print (self.save)
+        
 
         
 
@@ -385,7 +386,7 @@ if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("Pyllet Town")
-    print ("hello")
+    
     
     Game(screen).main()
 

@@ -15,6 +15,8 @@ class removableSprite(pygame.sprite.Sprite):
 
 	def update(self, dt, game):
 		if self.beenMoved == True:
-			self.currLocation = (-1000, -1000)
+			
+			self.currLocation = (-100, -100)
 			self.rect = pygame.Rect(self.currLocation, (self.width,self.height))
 			self.beenMoved = False
+			

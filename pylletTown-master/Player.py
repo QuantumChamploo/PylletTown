@@ -6,6 +6,7 @@ from SpriteLoop import SpriteLoop
 from npcSprite import npcSprite
 from spriteMove import spriteMove
 from scrollText import scrollText
+from projectileSprite import projectileSprite
 
 
 
@@ -42,6 +43,31 @@ def text_objects(text, font):
         textSurface = font.render(text, True, black)
         return textSurface, textSurface.get_rect()
 
+
+def rectCollision(sprite1, sprite2):
+	
+	
+	if sprite1.rect.x <= sprite2.rect.x <= (sprite1.rect.x + sprite1.width):
+		
+		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y <= sprite1.rect.y:
+			return True
+
+	if sprite1.rect.x  <= sprite2.rect.x  <= (sprite1.rect.x  + sprite1.width):
+		
+		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y - sprite2.height <= sprite1.rect.y:
+			return True
+	if sprite2.rect.x  <= sprite1.rect.x  <= sprite2.rect.x  + sprite2.width:
+		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y <= sprite1.rect.y:
+			return True
+	if sprite2.rect.x  <= sprite1.rect.x  <= sprite2.rect.x  + sprite2.width:
+		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y - sprite2.height <= sprite1.rect.y:
+			return True
+
+	else:
+		return False
+
+	
+	
 
 """ 
 														All of the types of updates a player or sprite might take
@@ -292,6 +318,8 @@ class Player(pygame.sprite.Sprite):
 		self.jumping = False
 		self.waveDashing = False
 		self.bool = False
+		self.fireHold = 0
+		self.projectiles = []
 
 
 		# Set default orientation
@@ -311,6 +339,10 @@ class Player(pygame.sprite.Sprite):
 		    self.image.scroll(0, -192)
 
 	def update(self, dt, game):
+		self.fireHold += 5
+		if self.fireHold > 30:
+			self.fireHold = 0
+
 		try:
 			for cell in game.tilemap.layers['statebasedSprites'].find('src'):
 				if len(game.tilemap.layers['statebasedSprites'].collide(self.rect, 'test')) > 0:
@@ -352,7 +384,19 @@ class Player(pygame.sprite.Sprite):
 		if self.waveDashing == True:
 			
 			wavedashUpdate(self, game)
-			
+
+
+		for sprite in self.projectiles:
+			if isinstance(sprite, projectileSprite):
+				for hldSprite in game.sprites:
+					if isinstance(hldSprite, removableSprite):
+						# if rectCollision(sprite, hldSprite):
+						# 	hldSprite.beenMoved = True
+						# if rectCollision(hldSprite, sprite):
+						# 	hldSprite.beenMoved = True	
+
+						if hldSprite.rect.colliderect(sprite.rect):
+							hldSprite.beenMoved = True
 
 
 
@@ -390,6 +434,10 @@ class Player(pygame.sprite.Sprite):
 		    elif key[pygame.K_e]:
 		    	self.jumping = True
 		    	self.bool = True
+		    elif key[pygame.K_f]:
+		    	if self.fireHold == 0:
+		    		self.projectiles.append(projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects))
+		    
 		    elif key[pygame.K_a] and not self.walking:
 		        if not self.walking:
 		            lastRect2 = self.rect.copy()
@@ -416,7 +464,7 @@ class Player(pygame.sprite.Sprite):
 		            		if abs(sprite.currLocation[0] - self.rect.x) < 20:
 		            			if abs(sprite.currLocation[1] - self.rect.y) < 20:
 		            				hld = sprite.pacing
-		            				print (sprite.currLocation)
+		            				
 		            				sprite.pause = True
 		            				clock = pygame.time.Clock()
 		            				gameDisplay = pygame.display.set_mode((800,600))
@@ -447,8 +495,7 @@ class Player(pygame.sprite.Sprite):
 		            						pygame.display.flip()
 
 		            						clock.tick(15)
-		            				print ('over heheheeh')
-		            				print (sprite.currLocation)
+		            				
 		            				sprite.pause = False
 		            				sprite.pacing = hld
 
@@ -467,8 +514,7 @@ class Player(pygame.sprite.Sprite):
 		           		self.whichCutscene = str(entryCell['event'])
 
 		           		self.inCutscene = True
-		           		print (str(entryCell['event']))
-		           		print (self.inCutscene)
+		           		
 
 
 		            if len(game.tilemap.layers['actions'].collide(self.rect, 'sign')) > 0:
@@ -548,7 +594,7 @@ class Player(pygame.sprite.Sprite):
 		    	if abs(sprite.currLocation[0] - self.rect.x) < 64:
 		    		if abs(sprite.currLocation[1] - self.rect.y) < 64:
 		    			if isinstance(sprite, removableSprite):
-		    				print ('oh helllll yeah')
+		    				
 		    		
 		    				sprite.beenMoved = True
 		    			else:
