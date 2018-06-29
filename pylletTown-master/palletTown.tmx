@@ -144,7 +144,7 @@
    eJztzrERgCAUREH6lVAqlg6wAK4CDT/B7syL71oDgHNcqVef+HCnUbj/pFm4/2elt/oEAAAAx9iIPAVv
   </data>
  </layer>
- <layer name="interactions" width="40" height="36">
+ <layer name="interactions" width="40" height="36" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzjEOgCAMQFGMwv0vLFK3DqwGTN5L2rTbLwUAAAAA4Bt3TE//865jTcvMGS1X6qlxt436/m4AFhkDEg==
   </data>
@@ -154,17 +154,22 @@
    eJzt2PdPE3EYx/FroiJQCrQFClQRBHEhoCi4ByLDAQqCggsnDgjDEQVFxYWKCLgQERfon8n7l0vg0vvet8d9rYMneeVJru1zTz65fJucpoWuS2gx+Uz0/Va0zeh251hVOzrCmKt//yZuzeh25+il7+tUN8vPbtf3daqb5We3h/t8/K4y5venlWx+t3EH3ejBXdxDL+4r3E82vwd4iD48wmM8wVM8U7ifbH79eI4XeIkBvMIgXkvcJ9qlaTGIhRtxLrn9ZPMbwjBG8AZv8Q7v8UHiPh72iUcCEuGV3M8qv6u4hlF8xBg+YRyfMYEvgvn6733s40cSkpHiUH7XcQNf8Q3f8QOTmMJP/BLM138fYJ9UpCEdQYfyi3T9K+dfpOp/zS8KixGNGMTCjTh4EI8EJMIrmKMqPx/8SEIyUhBAKtKQjiCWYKlgjmx+l3ElRNfPN2NlYBkykYXlyEYOViAXK7EKqwX3lc2vE10hun6+GWsN1iIP65CPAhRiPTagCBuxSXBfVc9fMUqwGVuwFduwHTuwE7uwG3sEc1Q9f6XYizLsQzkqUIkq7McBHMQhwRxV+VWjBodxBLWow1HUowHHcByNgjmq8mvCCZzEKZzGGTTjLM7hPC7gomDO/P/H3EpVflbnpfG6WanKz+q8NF43K9n8FlpQVbL5LRB8tsjRjWaXbH6R2m8+v7nV35afWY5W+zn9/tDq/V+4+zn9/tDYpwEjzry9
   </data>
  </layer>
- <layer name="statebasedSprites" width="40" height="36" visible="0">
+ <layer name="statebasedSprites" width="40" height="36">
   <data encoding="base64" compression="zlib">
    eJztzsEJACAMALHuv6VuUCewE/iTQkng/hcBAEy1qt098ZDV6Z4AAADgmwsi7AOn
   </data>
  </layer>
- <layer name="sprites" width="40" height="36">
+ <layer name="sprites" width="40" height="36" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt0UEKgDAMRcHc/z6ix+vSjSGWSO1iBkq2j98IAAAA3rqK+6ed27j5jx779XT2O5KXOYv7tZm+1W3x0FXtt5q+Hn25AZCrK1M=
   </data>
  </layer>
- <layer name="npcSprites" width="40" height="36">
+ <layer name="removableSprites" width="40" height="36" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzqERADAIBEH6by0lkGIyE43CINhVL15cBADAXlnsrI6LnemAhjsdAAAAfA9CfgQ5
+  </data>
+ </layer>
+ <layer name="npcSprites" width="40" height="36" visible="0">
   <data encoding="base64" compression="zlib">
    eJztzrENwCAMAEH2X5K00CQtVHgB3FqK7qTvvzUAAAAgM6JZPZFY0a6eALjo0VM9kXijr3rixw5M6Adl
   </data>

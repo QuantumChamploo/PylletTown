@@ -10,6 +10,7 @@ from Player import Player
 from statebasedSprite import statebasedSprite
 from SpriteLoop import SpriteLoop 
 from npcSprite import npcSprite
+from removableSprite import removableSprite
 
 
 
@@ -81,7 +82,6 @@ class Game(object):
             	print (cell['src'])
             	print ('above is the src')
 
-            		
 
 
 
@@ -90,12 +90,30 @@ class Game(object):
             pass
         else:
             self.tilemap.layers.append(self.objects)
+        try:
+            hldSprites = self.tilemap.layers['removableSprites'].find('src')
+            print (len(hldSprites))
+            print (hldSprites)
+            for cell in hldSprites:
+                print ('found one!!!!!')
+                self.sprites.append(removableSprite((cell.px,cell.py), cell, self.objects))
+                print ('did i find another?')
+               
+
+        except KeyError:
+           
+            pass
+        else:
+            hld2 = 9
+            
+
         # Initializing player sprite
         startCell = self.tilemap.layers['triggers'].find('playerStart')[0]
         self.player = Player((startCell.px, startCell.py), 
                              startCell['playerStart'], self.players)
         self.tilemap.layers.append(self.players)
         self.tilemap.set_focus(self.player.rect.x, self.player.rect.y) 
+        print ('left the loop')
 
 
     def saveGame(self):

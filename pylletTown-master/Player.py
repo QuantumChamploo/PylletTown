@@ -1,10 +1,12 @@
 import pygame
 from cutScene import cutScene
 from statebasedSprite import statebasedSprite
+from removableSprite import removableSprite
 from SpriteLoop import SpriteLoop 
 from npcSprite import npcSprite
 from spriteMove import spriteMove
 from scrollText import scrollText
+
 
 
 
@@ -90,6 +92,8 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			sprite.setSprite()    
 			sprite.dx = 0
 
+		lastRect3 = sprite.rect.copy()
+
 		if hldScene.curr.direction == 'up':
 			sprite.rect.y -= 4
 		if hldScene.curr.direction == 'down':
@@ -98,10 +102,17 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			sprite.rect.x -= 4
 		if hldScene.curr.direction == 'right':
 			sprite.rect.y += 4	
+		if len(game.tilemap.layers['triggers'].collide(sprite.rect, 'solid')) > 0:
+			sprite.rect = lastRect3
 		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
 		hldScene.decrementCurrMove()	
 		hldScene.verifyCurrentMove()
 			
+
+"""
+ 								waveDash update: checks in your save file for super wavedashing
+ 								Later we will add this to the usual wavedashing
+"""
 
 def wavedashUpdate(player, game):
 	lastRect = player.rect.copy()
@@ -141,12 +152,12 @@ def wavedashUpdate(player, game):
 		player.waveDashing = False
 		player.bool = False
 
-
+"""
+						jumpingUpdate: pretty simple
+"""
 
 def jumpingUpdate(player):
-	for event in pygame.event.get():
-		if event.type == pygame.KEYUP and event.key == pygame.K_e:
-			print ("oh please let wavedaing work")
+
 	if player.hldy < 32:
 		player.rect.y -= 4
 		player.hldy += 4
@@ -159,6 +170,10 @@ def jumpingUpdate(player):
 		player.bool = False		
 
 
+"""
+						cutsceneUpdate: A little lengthy. Extra booleans are needed if the cutscene
+						ends for the player before the NPCs
+"""
 
 def cutsceneUpdate(player, dt, game, cutscene):
 	# the cast and dictionary for the npcs r almost set up to do multiple npcs at a time, but
@@ -233,7 +248,7 @@ def cutsceneUpdate(player, dt, game, cutscene):
 			game.tilemap.set_focus(player.rect.x, player.rect.y)	
 
 
-
+			# here are some of our booleans. Need to make sure we reset the cutscenes 
 	if not (playerBool or npcBool):
 		if not skipReset:
 			for move in hldScene.moves:
@@ -247,7 +262,7 @@ def cutsceneUpdate(player, dt, game, cutscene):
 						move.resetMoves()
 					npcSceneDictionary[(cutscene,spriteName)].currPlace = 0
 					npcSceneDictionary[(cutscene,spriteName)].curr = npcSceneDictionary[(cutscene,spriteName)].first
-		print ("LEFT THE CUTSCENE")
+		
 		player.inCutscene = False
 
 
@@ -262,7 +277,7 @@ class Player(pygame.sprite.Sprite):
 
 	def __init__(self, location, orientation, *groups):
 		super(Player, self).__init__(*groups)
-		self.image = pygame.image.load('sprites/slammy.png')
+		self.image = pygame.image.load('sprites/milosprite01.png')
 		self.imageDefault = self.image.copy()
 		self.rect = pygame.Rect(location, (64,64))
 		self.orient = orientation 
@@ -298,6 +313,9 @@ class Player(pygame.sprite.Sprite):
 	def update(self, dt, game):
 		try:
 			for cell in game.tilemap.layers['statebasedSprites'].find('src'):
+				if len(game.tilemap.layers['statebasedSprites'].collide(self.rect, 'test')) > 0:
+					cell['test'] = 'newtest'
+
 
 				if game.save[cell['saveIndex']] == 'true':
 					game.sprites.append(statebasedSprite((cell.px,cell.py), cell, game.objects))
@@ -384,8 +402,16 @@ class Player(pygame.sprite.Sprite):
 		            elif self.orient == 'right':
 		                self.rect.x += 8
 		           # self.dx += 8
+		            # if len(game.tilemap.layers['removableSprites'].collide(self.rect, 'test')) > 0:
+		            # 	print ('omgomgomg')
+		            # 	hldCol = game.tilemap.layers['removableSprites'].collide(self.rect, 'test')
+		            # 	print ('omgomgomg')
+		            # 	for sprite in hldCol:
+		            # 		sprite.beenMoved = True
 
+		            # 	print ('in the nadnafsnd')
 		            for sprite in game.sprites:
+
 		            	if sprite.hasInteraction == True:
 		            		if abs(sprite.currLocation[0] - self.rect.x) < 20:
 		            			if abs(sprite.currLocation[1] - self.rect.y) < 20:
@@ -429,6 +455,9 @@ class Player(pygame.sprite.Sprite):
 	            		if abs(sprite.currLocation[0] - self.rect.x) < 8:
 	            			if abs(sprite.currLocation[1] - self.rect.y) < 8:
 	            				self.rect = lastRect2
+
+
+
 
 
 		            if len(game.tilemap.layers['interactions'].collide(self.rect,'event')) > 0:
@@ -513,9 +542,18 @@ class Player(pygame.sprite.Sprite):
 		    # Reset to the previous rectangle if player collides
 		    # with anything in the foreground layer
 		    for sprite in game.sprites:
+		    	if isinstance(sprite, removableSprite):
+
+		    		sprite.update(dt, game)
 		    	if abs(sprite.currLocation[0] - self.rect.x) < 64:
 		    		if abs(sprite.currLocation[1] - self.rect.y) < 64:
-		    			self.rect = lastRect
+		    			if isinstance(sprite, removableSprite):
+		    				print ('oh helllll yeah')
+		    		
+		    				sprite.beenMoved = True
+		    			else:
+
+		    				self.rect = lastRect
 		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'solid')) > 0:
 		        self.rect = lastRect

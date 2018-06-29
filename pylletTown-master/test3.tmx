@@ -29,4 +29,19 @@
    eJzt0cENgDAMBEG3CgRC/xXEfNKCjTQj3X+liwAAAAAAAAAAAAAAAAAAAAAAAKCTI3dWR7Dduac6An7kyo3qCLYZ/ujEH718f7zVEQAAAAAAAAAAAAAAAAAAAAAAQFsL9qQEuw==
   </data>
  </layer>
+ <layer name="removableSprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1LEJACAQBMEvxA60//oEIzEy+wtmKlg4uCoAAAAAAAAAAAAAAAAAAAAAAAASre4ACDa7AzjeHfxWhtEdAIHuv/JVAAAAAAAAAAAAAAAAAAAAAADAjw1SQQEi
+  </data>
+ </layer>
+ <layer name="sprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="npcSprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
 </map>

@@ -11,6 +11,21 @@
    <property name="sign" value="hey"/>
   </properties>
  </tile>
+ <tile id="14">
+  <properties>
+   <property name="height" type="int" value="64"/>
+   <property name="src" value="sprites/smokeyTree.png"/>
+   <property name="test" value=""/>
+   <property name="width" type="int" value="64"/>
+  </properties>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="height" value="64"/>
+   <property name="src" value="sprites/profglyph.png"/>
+   <property name="width" value="64"/>
+  </properties>
+ </tile>
  <tile id="18">
   <properties>
    <property name="sign" value="hey"/>
@@ -19,6 +34,22 @@
  <tile id="19">
   <properties>
    <property name="sign" value="hey"/>
+  </properties>
+ </tile>
+ <tile id="30">
+  <properties>
+   <property name="height" type="int" value="64"/>
+   <property name="src" value="sprites/maxsprite.png"/>
+   <property name="test" value=""/>
+   <property name="width" type="int" value="64"/>
+  </properties>
+ </tile>
+ <tile id="31">
+  <properties>
+   <property name="height" value="64"/>
+   <property name="src" value="sprites/slammy.png"/>
+   <property name="test" value=""/>
+   <property name="width" value="64"/>
   </properties>
  </tile>
  <tile id="34">
@@ -36,6 +67,7 @@
    <property name="height" value="64"/>
    <property name="saveIndex" type="int" value="5"/>
    <property name="src" value="sprites/smokeyTree.png"/>
+   <property name="test" value="hold"/>
    <property name="width" value="64"/>
   </properties>
  </tile>
