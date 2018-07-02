@@ -20,8 +20,7 @@ class cutScene():
 	def verifyCurrentMove(self):
 		if not self.curr.hasMoves():
 			if self.curr == self.last: 
-				print ('something')
-				
+				hld = 3				
 			else:
 				self.curr.resetMoves()
 				print (str(self.curr.totalMoves))

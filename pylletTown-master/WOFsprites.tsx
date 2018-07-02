@@ -5,7 +5,7 @@
   <properties>
    <property name="height" value="64"/>
    <property name="name" value="WOFplayer"/>
-   <property name="src" value="sprites/player.png"/>
+   <property name="src" value="sprites/slammy.png"/>
    <property name="style" value="random"/>
    <property name="width" value="64"/>
   </properties>

@@ -88,7 +88,7 @@ class Game(object):
                     self.sprites.append(statebasedSprite((cell.px,cell.py), cell, self.objects))
 
             for cell in self.tilemap.layers['enemySprites'].find('src'):
-                enemySprite((cell.px,cell.py), cell, 'down', self.objects)
+                self.sprites.append(enemySprite((cell.px,cell.py), cell, 'down', self.objects))
                 print ('oh helooooooo')
 
 

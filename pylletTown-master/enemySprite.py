@@ -2,6 +2,7 @@ import pygame
 from cutScene import cutScene
 from spriteMove import spriteMove
 from wallSprite import wallSprite
+from projectileSprite import projectileSprite
 import random
 
 
@@ -9,17 +10,34 @@ def enemySpriteUpdate(sprite, dt, game):
 	if sprite.moving == False:
 		sprite.timeCount += dt
 		if sprite.timeCount >= 100:
+			game.player.projectiles.append(projectileSprite((sprite.rect[0], sprite.rect[1]), sprite.orient, 'enemyFireball', game.objects))
 			if sprite.style == 'random':
 				sprite.timeCount = 0
 				hld = random.randint(1,101)
 				if hld % 4 == 0:
-					sprite.cutscene = cutScene((spriteMove(1,'left'), spriteMove(1,'left')))
+					hld2 = random.randint(1,101)
+					if hld2 % 4 == 0:
+						sprite.cutscene = cutScene([spriteMove(1,'left')])
+					if hld2 % 4 == 1:
+						sprite.cutscene = cutScene([spriteMove(1,'right')])
+					
+					if hld2 % 4 == 2:
+						sprite.cutscene = cutScene([spriteMove(1,'up')])
+					if hld2 % 4 == 3:
+						sprite.cutscene = cutScene([spriteMove(1,'down')])
 					sprite.moving = True
-
+					
+	
 
 
 	if sprite.moving == True:
-		sprite.dx += 4
+		if sprite.cutscene.curr.movesLeft == sprite.cutscene.curr.totalMoves:
+			sprite.orient = sprite.cutscene.curr.direction
+			sprite.setSprite()
+			sprite.cutscene.decrementCurrMove()
+			sprite.dx = 0
+			sprite.step = 'rightFoot'
+			sprite.dx += 4
 		if sprite.dx == 32:
 			# Self.step keeps track of when to flip the sprite so that
 			# the character appears to be taking steps with different feet.
@@ -40,12 +58,16 @@ def enemySpriteUpdate(sprite, dt, game):
 
 		if sprite.cutscene.curr.direction == 'up':
 			sprite.rect.y -= 4
+		
 		if sprite.cutscene.curr.direction == 'down':
+			
 			sprite.rect.y += 4
 		if sprite.cutscene.curr.direction == 'left':
 			sprite.rect.x -= 4
+			
 		if sprite.cutscene.curr.direction == 'right':
-			sprite.rect.y += 4	
+			sprite.rect.x += 4	
+			
 		if len(game.tilemap.layers['triggers'].collide(sprite.rect, 'solid')) > 0:
 			sprite.rect = lastRect3
 		for hldSprite in game.sprites:
@@ -61,6 +83,13 @@ def enemySpriteUpdate(sprite, dt, game):
 		sprite.cutscene.verifyCurrentMove()
 		if sprite.cutscene.hasNextMove() == False:
 			sprite.moving = False
+
+	if sprite.beenMoved == True:
+		print ('over hererere')
+			
+		sprite.currLocation = (-100, -100)
+		sprite.rect = pygame.Rect(sprite.currLocation, (sprite.width,sprite.height))
+		sprite.beenMoved = False
 
 						
 
@@ -85,7 +114,8 @@ class enemySprite(pygame.sprite.Sprite):
 		self.name = str(cell['name'])
 		self.moving = False
 		self.dx = 0
-		self.step = 'right'
+		self.beenMoved = False
+
 
 
 		self.setSprite()

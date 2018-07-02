@@ -373,6 +373,18 @@ class Player(pygame.sprite.Sprite):
 
 						if hldSprite.rect.colliderect(sprite.rect):
 							hldSprite.beenMoved = True
+					if isinstance(hldSprite, enemySprite):
+						# if rectCollision(sprite, hldSprite):
+						# 	hldSprite.beenMoved = True
+						# if rectCollision(hldSprite, sprite):
+						# 	hldSprite.beenMoved = True	
+						if sprite.name == 'fireball':
+							print ('inininin')
+							if hldSprite.rect.colliderect(sprite.rect):
+								hldSprite.beenMoved = True
+					if isinstance(hldSprite, wallSprite):
+						if hldSprite.rect.colliderect(sprite.rect):
+							sprite.beenMoved = True	
 
 
 
