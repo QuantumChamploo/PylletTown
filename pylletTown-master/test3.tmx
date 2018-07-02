@@ -1,22 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="fjfjfjf.tsx"/>
- <tileset firstgid="13" source="asdf.tsx"/>
+ <tileset firstgid="13" name="asdf" tilewidth="32" tileheight="32" tilecount="64" columns="16">
+  <image source="tiles/indoors.png" width="512" height="128"/>
+  <tile id="2">
+   <properties>
+    <property name="sign" value="hey"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="sign" value="hey"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="height" type="int" value="64"/>
+    <property name="src" value="sprites/smokeyTree.png"/>
+    <property name="test" value=""/>
+    <property name="width" type="int" value="64"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="height" value="64"/>
+    <property name="src" value="sprites/profglyph.png"/>
+    <property name="width" value="64"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="sign" value="hey"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="sign" value="hey"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="height" type="int" value="64"/>
+    <property name="src" value="sprites/maxsprite.png"/>
+    <property name="test" value=""/>
+    <property name="width" type="int" value="64"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="height" value="64"/>
+    <property name="src" value="sprites/slammy.png"/>
+    <property name="test" value=""/>
+    <property name="width" value="64"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="hasInteraction" value="true"/>
+    <property name="height" value="64"/>
+    <property name="name" value="smellyboy"/>
+    <property name="pace" value="false"/>
+    <property name="src" value="sprites/tazz.png"/>
+    <property name="width" value="64"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="height" value="64"/>
+    <property name="saveIndex" type="int" value="5"/>
+    <property name="src" value="sprites/smokeyTree.png"/>
+    <property name="test" value="hold"/>
+    <property name="width" value="64"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="sign" value="heytoo"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="sign" value="heytoo"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="hasInteraction" value="true"/>
+    <property name="height" value="64"/>
+    <property name="name" value="mssnglyph"/>
+    <property name="pace" value="true"/>
+    <property name="src" value="sprites/profglyph.png"/>
+    <property name="width" value="64"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="game" value="../AsteroidsInfinity/AsteroidsInfinity.py"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="sign" value="heytoo"/>
+   </properties>
+  </tile>
+  <tile id="55">
+   <properties>
+    <property name="sign" value="heytoo"/>
+   </properties>
+  </tile>
+ </tileset>
  <tileset firstgid="77" source="mushy.tsx"/>
  <tileset firstgid="97" source="gamingCabinets.tsx"/>
- <layer name="triggers" width="100" height="100">
+ <tileset firstgid="129" source="test3tileset.tsx"/>
+ <tileset firstgid="147" source="colorGround.tsx"/>
+ <layer name="triggers" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
-   eJzt1ksKwjAUhtEoVoW6Sd/ufwWm0As1VGfeCp4D/8ROJB+hLQUAAAAAAAAAAAAAAAAAAAAAyNLVbcexnGmHYYdl/87fac8/GkxHnugxPf/NuL7okS16HOtO4296LCd6XOtuzbPo4Z2eJ3rMiR7uSJ5PPYIeefT4LdFjVbdunp3rLuW1h3fJd3XjdnX75tm97lHcj0zDOzvuSDcz37z54sz7N9MDAAAAAAAAAAAAAAAAAAAAAPhnTx6DBZI=
+   eJzt1kEKwjAQBdAoVoV6SQW9/xFMIQMhVHdOhb4Hf9NsSj7DpBQAAAAAAAAAAAAAAAAAAAAAIMtUc25hO30PS27b/s7ujPcfHfQhT/TR3/+pZS76yBZ93Gse7Zs+thN9PGtew1n0YafniT7WRB9mJM+3Puz0fPr4L9HHoeY4nK31YZf81tRyqbkOZ+Yj37KzY0amlXjz5os7nz9EHwAAAAAAAAAAAAAAAAAAAADAnr0BxYQEXA==
   </data>
  </layer>
- <layer name="interactions" width="100" height="100">
+ <layer name="interactions" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
   </data>
  </layer>
  <layer name="actions" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+   eJzt0bENADAIBDH2r8jGNCxAqi9s6Sa4KgAAAAAAAAAAAAAAAAAAAAAAAJK8jQx+wE1vZPADAAAAAAAAAAAAAAAAAAAAAAAA/gxAgwSF
   </data>
  </layer>
  <layer name="background" width="100" height="100">
@@ -29,22 +138,27 @@
    eJzt0cENgDAMBEG3CgRC/xXEfNKCjTQj3X+liwAAAAAAAAAAAAAAAAAAAAAAAKCTI3dWR7Dduac6An7kyo3qCLYZ/ujEH718f7zVEQAAAAAAAAAAAAAAAAAAAAAAQFsL9qQEuw==
   </data>
  </layer>
- <layer name="removableSprites" width="100" height="100">
+ <layer name="removableSprites" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1LEJACAQBMEvxA60//oEIzEy+wtmKlg4uCoAAAAAAAAAAAAAAAAAAAAAAAASre4ACDa7AzjeHfxWhtEdAIHuv/JVAAAAAAAAAAAAAAAAAAAAAADAjw1SQQEi
   </data>
  </layer>
- <layer name="sprites" width="100" height="100">
+ <layer name="sprites" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
   </data>
  </layer>
- <layer name="npcSprites" width="100" height="100">
+ <layer name="enemySprites" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
   </data>
  </layer>
- <layer name="statebasedSprites" width="100" height="100">
+ <layer name="npcSprites" width="100" height="100" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="statebasedSprites" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
   </data>

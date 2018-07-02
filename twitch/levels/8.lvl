@@ -1,0 +1,59 @@
+# map Diagram
+
+# X = block, I = entrance, O = exit
+# . = space, G = entrance gate
+# g = exit gate, M = monster spawn point
+# S = player start point
+
+
+:Map
+XXXXXXXXXXXXXXX.XXXXXXXXXXXXXXXXXXXXXXXX
+X.............X.X......................X
+X..M..........XXX......................X
+X........................XXX...........X
+X.....XXX................X.X...........X
+X.....X.X......M.........XXX......M....X
+X.....XXX..............................X
+X......................................X
+X...............XXX...........M........X
+X...............X.X....................X
+X......M........XXX.....M..............X
+X......................................X
+XXX..................................XXX
+..G...........................XXX....g.X
+I.G.S.............M...........X.X....gO.
+..G........XXX................XXX....g.X
+XXX........X.X.......................XXX
+X..........XXX.......XXX...............X
+X....................X.X...............X
+X....................XXX.......M.......X
+X...XXX......M.........................X
+X...X.X................................X
+X...XXX......................XXX.......X
+X............XXX.......M.....X.X...M...X
+X............X.X.............XXX.......X
+X....M.......XXX.......................X
+X......................................X
+X......................................X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+:Monsters
+# s = shooter, h = hunter, g = gunner
+# a = spider, r = robot, B = Boss.
+# - = None
+
+# Possessions:
+# - = nothing, b = bullets, r = rockets
+# l = laserammo, g = grenades, B = bomb
+# k = end level key, + = health kit
+
+2s-, 2sb, 4-+, 6hl, 6gr, 7-+, 8-+, 8-b, 9sb, 9ak 
+
+
+
+
+
+
+
+
+

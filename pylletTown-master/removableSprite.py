@@ -12,6 +12,7 @@ class removableSprite(pygame.sprite.Sprite):
 		self.hasInteraction = False
 		self.beenMoved = False	
 		self.location = location
+		self.name = ''
 
 	def update(self, dt, game):
 		if self.beenMoved == True:

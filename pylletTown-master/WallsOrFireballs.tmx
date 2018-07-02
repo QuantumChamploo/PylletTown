@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" source="fjfjfjf.tsx"/>
+ <tileset firstgid="13" source="WOFground.tsx"/>
+ <tileset firstgid="20" source="WOFsprites.tsx"/>
+ <tileset firstgid="38" source="asdf.tsx"/>
+ <layer name="triggers" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2TsKgEAMRVEV/IDuf72mmRVMiqecA2G6VLnVLAsAAAAAAAAAAAAAAADwR3vN0fgy5655Gl/mdN21Pnp03bU+eugjiz6y6COLPrLoI4s+sugjiz6y6COLPrLoI4s+soy7Xmu2hj3MGXd91lwNe5jjfzCL/0EAAAAAAAAAAAAAAAAAAAAAAIDvewF+MgTb
+  </data>
+ </layer>
+ <layer name="interactions" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="actions" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2UEKwjAURdFsoCq4/72Kg0AJjb/FF52cAwVBR739SaitAQAAAAAAAAAAAAAAAPALz9BFxvtePorrVnyvR87YY2t1Hz3Wqeajz8bY6d70WOHMelXNjx45vUe/z/vnvto39Mg7mo+re4geObP16mg27pPf6pFT7R9nZkWPnKMe1b4xNtIjZ99ja+dnQo81xvmYzcY2+axH1njeNR//tZ+P6kzlfLXeN++veh89cnqPT2eqakb0yLn6/sp6tZb/owAAAAAAAAAAAAAAAAAAAAAAACDnBcKNFMs=
+  </data>
+ </layer>
+ <layer name="enemySprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztyTENAAAIA7CJwb9GFOzhI2nfJgAAAAAAAAAAAAAAAAAA0M3xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvloTdABJ
+  </data>
+ </layer>
+ <layer name="sprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="npcSprites" width="100" height="100" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6DFs38iK+zSBxKQAAAAAAAAAAAAAAAAAABAZ74DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABxYUBABJ
+  </data>
+ </layer>
+ <layer name="statebasedSprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+ <layer name="removableSprites" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1lC6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAbnEAAAQ==
+  </data>
+ </layer>
+</map>

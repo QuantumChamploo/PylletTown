@@ -7,6 +7,9 @@ from npcSprite import npcSprite
 from spriteMove import spriteMove
 from scrollText import scrollText
 from projectileSprite import projectileSprite
+from wallSprite import wallSprite
+from enemySprite import enemySprite
+import os
 
 
 
@@ -44,27 +47,6 @@ def text_objects(text, font):
         return textSurface, textSurface.get_rect()
 
 
-def rectCollision(sprite1, sprite2):
-	
-	
-	if sprite1.rect.x <= sprite2.rect.x <= (sprite1.rect.x + sprite1.width):
-		
-		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y <= sprite1.rect.y:
-			return True
-
-	if sprite1.rect.x  <= sprite2.rect.x  <= (sprite1.rect.x  + sprite1.width):
-		
-		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y - sprite2.height <= sprite1.rect.y:
-			return True
-	if sprite2.rect.x  <= sprite1.rect.x  <= sprite2.rect.x  + sprite2.width:
-		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y <= sprite1.rect.y:
-			return True
-	if sprite2.rect.x  <= sprite1.rect.x  <= sprite2.rect.x  + sprite2.width:
-		if (sprite1.rect.y - sprite1.height) <= sprite2.rect.y - sprite2.height <= sprite1.rect.y:
-			return True
-
-	else:
-		return False
 
 	
 	
@@ -130,6 +112,11 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			sprite.rect.y += 4	
 		if len(game.tilemap.layers['triggers'].collide(sprite.rect, 'solid')) > 0:
 			sprite.rect = lastRect3
+		for hldSprite in game.sprites:
+			if isinstance(hldSprite, wallSprite):
+				hldSprite.rect.colliderect(sprite.rect)
+				sprite.rect = lastRect3
+
 		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
 		hldScene.decrementCurrMove()	
 		hldScene.verifyCurrentMove()
@@ -343,18 +330,7 @@ class Player(pygame.sprite.Sprite):
 		if self.fireHold > 30:
 			self.fireHold = 0
 
-		try:
-			for cell in game.tilemap.layers['statebasedSprites'].find('src'):
-				if len(game.tilemap.layers['statebasedSprites'].collide(self.rect, 'test')) > 0:
-					cell['test'] = 'newtest'
-
-
-				if game.save[cell['saveIndex']] == 'true':
-					game.sprites.append(statebasedSprite((cell.px,cell.py), cell, game.objects))
-		except KeyError:
-			pass
-		else:
-			hld = 'hld'
+		
 
 		key = pygame.key.get_pressed()
 
@@ -438,7 +414,11 @@ class Player(pygame.sprite.Sprite):
 		    	if self.fireHold == 0:
 		    		self.projectiles.append(projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects))
 		    
+		    elif key[pygame.K_g]:
+		    	game.sprites.append(wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects))
+		    
 		    elif key[pygame.K_a] and not self.walking:
+		        
 		        if not self.walking:
 		            lastRect2 = self.rect.copy()
 		            if self.orient == 'up':
@@ -512,9 +492,25 @@ class Player(pygame.sprite.Sprite):
 		           		gameDisplay = pygame.display.set_mode((800,600))
 		           		entryCell = game.tilemap.layers['interactions'].collide(self.rect,'event')[0]
 		           		self.whichCutscene = str(entryCell['event'])
+		           			
 
 		           		self.inCutscene = True
-		           		
+
+
+		            	
+
+
+		            if len(game.tilemap.layers['actions'].collide(self.rect, 'game')) > 0:
+		            	print('omg i hope this fucking workssssss')
+		            	entryCell = game.tilemap.layers['actions'].collide(self.rect, 'game')[0]
+		            	print (entryCell['game'])
+		            	path = str(entryCell['game'])
+		            	if path == "streetpyghter.py":
+		            		os.system('cd ../StreetPyghter/src')
+		            	os.system('python3 ' + path)
+
+
+
 
 
 		            if len(game.tilemap.layers['actions'].collide(self.rect, 'sign')) > 0:
@@ -598,16 +594,30 @@ class Player(pygame.sprite.Sprite):
 		    		
 		    				sprite.beenMoved = True
 		    			else:
+		    				hlder = 8
 
-		    				self.rect = lastRect
+		    				
+		    	if isinstance(sprite, wallSprite):
+		    		if self.rect.colliderect(sprite):
+		    			self.rect = lastRect
+		    	if isinstance(sprite, npcSprite):
+		    		if self.rect.colliderect(sprite):
+		    			self.rect = lastRect
+		    	if isinstance(sprite, statebasedSprite):
+		    		if self.rect.colliderect(sprite):
+		    			self.rect = lastRect
+		    		
 		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'solid')) > 0:
 		        self.rect = lastRect
+		        
 		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'waveDashable')) > 0:
 		        self.rect = lastRect
 
-
+		    if len(game.tilemap.layers['interactions'].collide(self.rect, 
+		                                                    'mini')) > 0:
+		        self.rect = lastRect
 		    # Area entry detection:
 		    elif len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'entry')) > 0:

@@ -1,0 +1,17 @@
+ 
+ - Mouse motion is dependant on framerate, and changes when the framerate changes.
+   This is not good, and happens because the mouse motion algorithm isn't adjusted
+   depending on the frame length, like all other movement code is. I've been unable
+   to modify the code in a way that doesn't make it suck more than it already does.
+   I'll revisit this issue.
+
+ - The code is garbage, and should be rewritten. One monolithic source file? Ugh.
+   This was my first python programming project > 300 loc, and it shows. I may
+   restructure the code for clarity.
+
+ - Some more optimisations could be made. Especially the parts where monsters
+   determine the state of their projectiles is around 8 times slower than it could
+   be. Also, all angles are stored as degrees rather than radians, which means that
+   every time they're read or written, there's an unnecessary multiplication and 
+   division.
+

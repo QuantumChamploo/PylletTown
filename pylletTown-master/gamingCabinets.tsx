@@ -3,6 +3,7 @@
  <image source="sprites/gamingCabinets.png" trans="f7f6ff" width="128" height="256"/>
  <tile id="0">
   <properties>
+   <property name="miniGame" value="asdfasdfa"/>
    <property name="solid" value=""/>
   </properties>
  </tile>

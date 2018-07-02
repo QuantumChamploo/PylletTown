@@ -91,6 +91,11 @@
    <property name="width" value="64"/>
   </properties>
  </tile>
+ <tile id="53">
+  <properties>
+   <property name="game" value="../AsteroidsInfinity/AsteroidsInfinity.py"/>
+  </properties>
+ </tile>
  <tile id="54">
   <properties>
    <property name="sign" value="heytoo"/>

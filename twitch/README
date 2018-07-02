@@ -1,0 +1,73 @@
+Twitch - a GPL arcade game for windows and linux.
+http://www3.telus.net/futility/futility/twitch.html
+
+by David Clark
+silenus@telus.net
+
+Version 1.0
+
+Twitch is an overhead 2-d shooter, reminiscent of games like Robotron or Tron:
+Deadly Disks. The player has entered the fortress of the evil Hippopoticus, 
+and is trying to rescue the fair Lady Penelope from his clutches. I wrote
+Twitch as a proof-of-concept: namely that Python, properly written, is fast
+enough to create a playable, cross-platform arcade game.
+
+INSTALLATION:
+-------------
+
+Twitch requires the SDL multimedia library from www.libsdl.org, and the optional
+SDL_Image, and SDL_ttf modules. It also requires version 0.9 or later of pygame,
+Pete Shinner's SDL wrapper for python, available from pygame.seul.org. Finally,
+Twitch requires Python version 2.0 or later, available from www.python.org.
+
+Linux:
+
+Untar the tar.gz file somewhere like $HOME/games or something. Putting it in
+/opt/games or /usr/local/games would work too - as long as everything stays
+together. cd to the twitch-1.0 directory and run the game by typing:
+
+./twitch.py
+
+Windows:
+
+Unzip the zip file wherever you like, and run twitch by double-clicking on 
+"twitch.py".
+
+COMMAND OPTIONS:
+----------------
+
+Type "./twitch.py --help" to view the various options. You can run twitch
+fullscreen or in a window, with or without sound, using two different mouse
+modes, and with a variety of cheat/god mode options.
+
+GAMEPLAY:
+---------
+
+You need to progress through 10 rooms, defeating Hippopoticus's robotic army
+as you go. You enter the first room, and the gate closes behind you. You can't
+leave until you kill the monster with the key.
+
+Monsters will warp into the room - some will carry ammunition or health packs.
+Kill them using the seven weapons at your disposal, and they will drop
+whatever they're carrying.
+
+You can move using the arrow keys, the asdw keys, or the keypad keys
+8,2,4 and 6. You aim with the mouse - moving the mouse will move the aiming
+crosshair. Fire by pressing the left mouse button. You can switch weapons
+by hitting any of the following keys: q, e, right shift, right ctrl, keypad +
+and keypad enter.
+
+In the bottom left corner of the screen, your weapons are pictured. The
+currently selected weapon is outlined.
+
+In the bootom center of the screen, the ammo remaining for the current
+weapon is displayed. Weapon # 1, the shotgun, has unlimited ammo.
+Each weapon has a corresponding maximum ammount of ammo you can carry - if
+you already have enough ammo, picking up more won't help.
+
+The bottom right corner of the screen displays your health bar in red - it
+shrinks as you are damaged, and grows as you touch health kits.
+
+If you reach level 10, you will face Hippopoticus himself. Defeat him, and
+you rescue the fair Lady Penelope!
+

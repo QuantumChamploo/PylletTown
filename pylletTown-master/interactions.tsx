@@ -16,6 +16,11 @@
    <property name="event" value="walking intro"/>
   </properties>
  </tile>
+ <tile id="7">
+  <properties>
+   <property name="mini" value="../AsteroidsInfinity/AsteroidsInfinity.py"/>
+  </properties>
+ </tile>
  <tile id="8">
   <properties>
    <property name="event" value="walking intro"/>

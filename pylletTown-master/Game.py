@@ -11,6 +11,7 @@ from statebasedSprite import statebasedSprite
 from SpriteLoop import SpriteLoop 
 from npcSprite import npcSprite
 from removableSprite import removableSprite
+from enemySprite import enemySprite
 
 
 
@@ -78,18 +79,26 @@ class Game(object):
             for cell in self.tilemap.layers['sprites'].find('src'):
                 SpriteLoop((cell.px,cell.py), cell, self.objects)
             for cell in self.tilemap.layers['npcSprites'].find('src'):
-            	self.sprites.append(npcSprite((cell.px,cell.py), cell,'down', self.objects))
+                self.sprites.append(npcSprite((cell.px,cell.py), cell,'down', self.objects))
+                print ('oh helooooooo2')
             for cell in self.tilemap.layers['statebasedSprites'].find('src'):
 
 
                 if self.save[cell['saveIndex']] == 'true':
                     self.sprites.append(statebasedSprite((cell.px,cell.py), cell, self.objects))
 
+            for cell in self.tilemap.layers['enemySprites'].find('src'):
+                enemySprite((cell.px,cell.py), cell, 'down', self.objects)
+                print ('oh helooooooo')
+
+
+
 
 
 
         # In case there is no sprite layer for the current map
         except KeyError:
+            print ('key error')
             pass
         else:
             self.tilemap.layers.append(self.objects)
@@ -386,6 +395,7 @@ if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("Pyllet Town")
+    os.system('python3 test3.py')
     
     
     Game(screen).main()
