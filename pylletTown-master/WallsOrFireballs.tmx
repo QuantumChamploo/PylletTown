@@ -24,9 +24,9 @@
    eJzt2UEKwjAURdFsoCq4/72Kg0AJjb/FF52cAwVBR739SaitAQAAAAAAAAAAAAAAAPALz9BFxvtePorrVnyvR87YY2t1Hz3Wqeajz8bY6d70WOHMelXNjx45vUe/z/vnvto39Mg7mo+re4geObP16mg27pPf6pFT7R9nZkWPnKMe1b4xNtIjZ99ja+dnQo81xvmYzcY2+axH1njeNR//tZ+P6kzlfLXeN++veh89cnqPT2eqakb0yLn6/sp6tZb/owAAAAAAAAAAAAAAAAAAAAAAACDnBcKNFMs=
   </data>
  </layer>
- <layer name="enemySprites" width="100" height="100" visible="0">
+ <layer name="enemySprites" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt07EJACAMRcEM4/4z2ouIAdGAd6XlfyYCAAAAAAAAAAAAAAAAAKCulnznvNXWOrynQX0a3dXC5hVkG2gG8ztwG/xm98+7jbvGve1fn0YAAAAAAAAAAAAAAAAAAAAAAAAAAGd0aMYCZQ==
+   eJzt1aERADAIBEGKSf81UgGCDIJMdu3LFxcBAAAAAAAAAAAAAAAAAAC1c7kB8K9uH/QEAPbS6ff4DAAAAAAAAAAAAAAAAAAAAAAAAABgRgIOwwDZ
   </data>
  </layer>
  <layer name="sprites" width="100" height="100">

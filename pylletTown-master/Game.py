@@ -45,7 +45,9 @@ Save and Load
 class Game(object):
 
     def __init__(self, screen):
+        # the screen is a pygame display surface
         self.screen = screen
+        # the save field will be filled with the CSV entries from our save files
         self.save = []
 
 
@@ -71,25 +73,44 @@ class Game(object):
 																				
         self.tilemap = tmx.load(mapFile, screen.get_size())
         
+        # These fields are sprite class abstract groups. We will use the tmx API to do remove/kill and parse through the games
+        # sprite instantiations 
+
+        # Players is for just player class 
         self.players = tmx.SpriteLayer()
+
+        # Objects is all things that will be updated
         self.objects = tmx.SpriteLayer()
+
+        # Sub groups used to make code simpler and easier to read
+        self.projectiles = tmx.SpriteLayer()
+        self.collision = tmx.SpriteLayer()
+        self.interactable = tmx.SpriteLayer()
+        self.named = tmx.SpriteLayer()
+        self.removable = tmx.SpriteLayer()
         self.sprites = []
 																				        # Initializing other animated sprites
         try:
             for cell in self.tilemap.layers['sprites'].find('src'):
                 SpriteLoop((cell.px,cell.py), cell, self.objects)
             for cell in self.tilemap.layers['npcSprites'].find('src'):
-                self.sprites.append(npcSprite((cell.px,cell.py), cell,'down', self.objects))
-                print ('oh helooooooo2')
+                npcSprite((cell.px,cell.py), cell,'down', self.objects, self.collision, self.interactable, self.named)
+
             for cell in self.tilemap.layers['statebasedSprites'].find('src'):
 
 
                 if self.save[cell['saveIndex']] == 'true':
-                    self.sprites.append(statebasedSprite((cell.px,cell.py), cell, self.objects))
+                   statebasedSprite((cell.px,cell.py), cell, self.objects, self.collision, self.interactable)
 
             for cell in self.tilemap.layers['enemySprites'].find('src'):
-                self.sprites.append(enemySprite((cell.px,cell.py), cell, 'down', self.objects))
-                print ('oh helooooooo')
+                enemySprite((cell.px,cell.py), cell, 'down', self.objects, self.collision, self.removable, self.named)
+
+            hldSprites = self.tilemap.layers['removableSprites'].find('src')
+            
+            for cell in hldSprites:
+               
+                removableSprite((cell.px,cell.py), cell, self.objects, self.collision, self.removable)                
+   
 
 
 
@@ -102,20 +123,7 @@ class Game(object):
             pass
         else:
             self.tilemap.layers.append(self.objects)
-        try:
-            hldSprites = self.tilemap.layers['removableSprites'].find('src')
-            
-            for cell in hldSprites:
-               
-                self.sprites.append(removableSprite((cell.px,cell.py), cell, self.objects))
-              
-               
-
-        except KeyError:
-           
-            pass
-        else:
-            hld2 = 9
+        
             
 
         # Initializing player sprite

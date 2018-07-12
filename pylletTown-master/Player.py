@@ -112,7 +112,7 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			sprite.rect.y += 4	
 		if len(game.tilemap.layers['triggers'].collide(sprite.rect, 'solid')) > 0:
 			sprite.rect = lastRect3
-		for hldSprite in game.sprites:
+		for hldSprite in game.objects:
 			if isinstance(hldSprite, wallSprite):
 				hldSprite.rect.colliderect(sprite.rect)
 				sprite.rect = lastRect3
@@ -203,7 +203,7 @@ def cutsceneUpdate(player, dt, game, cutscene):
 		skipNpcReset = True
 	else:
 		skipNpcReset = False
-	for sprite in game.sprites:
+	for sprite in game.named:
 		if sprite.name in npcSceneCast[cutscene]:
 
 			if npcSceneDictionary[(cutscene, sprite.name)].hasNextMove():
@@ -214,7 +214,7 @@ def cutsceneUpdate(player, dt, game, cutscene):
 
 
 	if npcBool:
-		for sprite in game.sprites:
+		for sprite in game.named:
 			if sprite.name in npcSceneCast[cutscene]:
 
 				npcUpdate(sprite.name, sprite, dt, game, cutscene)
@@ -362,9 +362,9 @@ class Player(pygame.sprite.Sprite):
 			wavedashUpdate(self, game)
 
 
-		for sprite in self.projectiles:
+		for sprite in game.objects:
 			if isinstance(sprite, projectileSprite):
-				for hldSprite in game.sprites:
+				for hldSprite in game.objects:
 					if isinstance(hldSprite, removableSprite):
 						# if rectCollision(sprite, hldSprite):
 						# 	hldSprite.beenMoved = True
@@ -379,7 +379,7 @@ class Player(pygame.sprite.Sprite):
 						# if rectCollision(hldSprite, sprite):
 						# 	hldSprite.beenMoved = True	
 						if sprite.name == 'fireball':
-							print ('inininin')
+							
 							if hldSprite.rect.colliderect(sprite.rect):
 								hldSprite.beenMoved = True
 					if isinstance(hldSprite, wallSprite):
@@ -424,10 +424,11 @@ class Player(pygame.sprite.Sprite):
 		    	self.bool = True
 		    elif key[pygame.K_f]:
 		    	if self.fireHold == 0:
-		    		self.projectiles.append(projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects))
+		    		projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects, game.projectiles, game.named)
+
 		    
 		    elif key[pygame.K_g]:
-		    	game.sprites.append(wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects))
+		    	wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects)
 		    
 		    elif key[pygame.K_a] and not self.walking:
 		        
@@ -450,7 +451,7 @@ class Player(pygame.sprite.Sprite):
 		            # 		sprite.beenMoved = True
 
 		            # 	print ('in the nadnafsnd')
-		            for sprite in game.sprites:
+		            for sprite in game.interactable:
 
 		            	if sprite.hasInteraction == True:
 		            		if abs(sprite.currLocation[0] - self.rect.x) < 20:
@@ -595,7 +596,7 @@ class Player(pygame.sprite.Sprite):
 		    # Collision detection:
 		    # Reset to the previous rectangle if player collides
 		    # with anything in the foreground layer
-		    for sprite in game.sprites:
+		    for sprite in game.collision:
 		    	if isinstance(sprite, removableSprite):
 
 		    		sprite.update(dt, game)

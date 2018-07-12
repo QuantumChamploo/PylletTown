@@ -22,6 +22,7 @@ class projectileSprite(pygame.sprite.Sprite):
 		
 
 	def update(self, dt, game):
+
 		if self.name == 'fireball':
 			if self.rect.x > -30 and self.rect.y > -30:
 				if self.direction == 'left':
@@ -35,11 +36,22 @@ class projectileSprite(pygame.sprite.Sprite):
 			if self.rect.x > 3000 or self.rect.y > 3000:
 				self.rect.x = -100
 				self.rect.y = -100
+				self.remove(game.objects)
+				self.kill()
+
+			if self.rect.x < 0:
+				self.remove(game.objects)
+				self.kill()	
+			if self.rect.y < 0:
+				self.remove(game.objects)
+				self.kill()	
 			
 			if self.beenMoved == True:
 				self.rect.x = -100
 				self.rect.y = -100
 				self.beenMoved = False
+				self.remove(game.objects)
+
 		if self.name == 'enemyFireball':
 			if self.rect.x > -30 and self.rect.y > -30:
 				if self.direction == 'left':
@@ -53,11 +65,27 @@ class projectileSprite(pygame.sprite.Sprite):
 			if self.rect.x > 3000 or self.rect.y > 3000:
 				self.rect.x = -100
 				self.rect.y = -100
-			
+				self.remove(game.objects)
+				self.kill()
+			if self.rect.x < -15:
+				self.rect.x = -100
+				self.rect.y = -100
+				self.remove(game.objects)
+				self.kill()	
+			if self.rect.y < -15:
+				self.rect.x = -100
+				self.rect.y = -100
+				self.remove(game.objects)
+				self.kill()		
 			if self.beenMoved == True:
 				self.rect.x = -100
 				self.rect.y = -100
 				self.beenMoved = False
+				self.rect.x = -100
+				self.rect.y = -100
+				self.remove(game.objects)
+				self.kill()
+				
 			
 		#self.rect = pygame.Rect(currLocation, (self.width,self.height))
 		

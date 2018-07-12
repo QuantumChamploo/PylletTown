@@ -20,6 +20,7 @@ def enemySpriteUpdate(sprite, dt, game):
 						sprite.cutscene = cutScene([spriteMove(1,'left')])
 					if hld2 % 4 == 1:
 						sprite.cutscene = cutScene([spriteMove(1,'right')])
+
 					
 					if hld2 % 4 == 2:
 						sprite.cutscene = cutScene([spriteMove(1,'up')])
@@ -60,6 +61,7 @@ def enemySpriteUpdate(sprite, dt, game):
 			sprite.rect.y -= 4
 		
 		if sprite.cutscene.curr.direction == 'down':
+
 			
 			sprite.rect.y += 4
 		if sprite.cutscene.curr.direction == 'left':
@@ -72,24 +74,30 @@ def enemySpriteUpdate(sprite, dt, game):
 			sprite.rect = lastRect3
 		for hldSprite in game.sprites:
 			if isinstance(hldSprite, wallSprite):
-				hldSprite.rect.colliderect(sprite.rect)
-				sprite.rect = lastRect3
+				if hldSprite.rect.colliderect(sprite.rect):
+					sprite.rect = lastRect3
+
 			if isinstance(hldSprite, enemySprite):
-				hldSprite.rect.colliderect(sprite.rect)
-				sprite.rect = lastRect3
+				if hldSprite != sprite:
+					if hldSprite.rect.colliderect(sprite.rect):
+						sprite.rect = lastRect3
+
 
 		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
+
 		sprite.cutscene.decrementCurrMove()	
 		sprite.cutscene.verifyCurrentMove()
 		if sprite.cutscene.hasNextMove() == False:
 			sprite.moving = False
 
 	if sprite.beenMoved == True:
-		print ('over hererere')
+
 			
 		sprite.currLocation = (-100, -100)
 		sprite.rect = pygame.Rect(sprite.currLocation, (sprite.width,sprite.height))
 		sprite.beenMoved = False
+		sprite.remove(game.objects)
+		sprite.kill()	
 
 						
 
