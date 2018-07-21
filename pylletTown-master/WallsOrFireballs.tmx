@@ -26,7 +26,7 @@
  </layer>
  <layer name="enemySprites" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1aERADAIBEGKSf81UgGCDIJMdu3LFxcBAAAAAAAAAAAAAAAAAAC1c7kB8K9uH/QEAPbS6ff4DAAAAAAAAAAAAAAAAAAAAAAAAABgRgIOwwDZ
+   eJzt08EJACAMA0CHcf8Z/ftQBCEW7yYoSdoaAAAAAAAAAAAAAAAAAMC7evoAlh3oB/b8SY7sc06z1xU/s/86dJUl/xzZ16MzfjNv3g8AAAAAAAAAAAAAAAAAAAAAAAAAcMsAIYAB+Q==
   </data>
  </layer>
  <layer name="sprites" width="100" height="100">

@@ -24,6 +24,20 @@ COLOR_WHITE = (255, 255, 255)
 COLOR_BLACK = (0, 0, 0)
 COLOR_MAROON =  (40, 0, 40)
 MENU_BACKGROUND_COLOR = (228, 55, 36)
+COLOR_LIMEGREEN = (0, 255, 127)
+COLOR_LIGHTCORAL  =  (240, 128, 128)
+
+
+_sound_library = {}
+
+def play_sound(path):
+  global _sound_library
+  sound = _sound_library.get(path)
+  if sound == None:
+    canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
+    sound = pygame.mixer.Sound(canonicalized_path)
+    _sound_library[path] = sound
+  sound.play()
 
 
 """ 
@@ -34,6 +48,13 @@ MENU_BACKGROUND_COLOR = (228, 55, 36)
 def text_objects(text, font):
         textSurface = font.render(text, True, black)
         return textSurface, textSurface.get_rect()
+
+
+
+def text_objectsColor(text, font, color):
+        textSurface = font.render(text, True, color)
+        return textSurface, textSurface.get_rect()
+
 
 """
 The game class. Where the main menu is held and where the outer world 
@@ -49,6 +70,7 @@ class Game(object):
         self.screen = screen
         # the save field will be filled with the CSV entries from our save files
         self.save = []
+        self.samePlayer = False
 
 
     
@@ -72,6 +94,7 @@ class Game(object):
 																				# *** *** ***
 																				
         self.tilemap = tmx.load(mapFile, screen.get_size())
+        self.mapFile = mapFile
         
         # These fields are sprite class abstract groups. We will use the tmx API to do remove/kill and parse through the games
         # sprite instantiations 
@@ -88,7 +111,30 @@ class Game(object):
         self.interactable = tmx.SpriteLayer()
         self.named = tmx.SpriteLayer()
         self.removable = tmx.SpriteLayer()
-        self.sprites = []
+        self.enemies = tmx.SpriteLayer()
+        #self.sprites = []
+
+
+        startCell = self.tilemap.layers['triggers'].find('playerStart')[0]
+        if self.samePlayer == False:
+
+            self.player = Player((startCell.px, startCell.py), 
+                                 startCell['playerStart'], self.players) 
+        else:
+            hld1 = self.player.hearts
+            hld2 = self.player.WOFlevel
+            hld3 = self.player.magicPer            
+            self.player = Player((startCell.px, startCell.py), 
+                                 startCell['playerStart'], self.players) 
+            self.player.hearts = hld1
+            self.player.WOFlevel = hld2  
+            self.player.magicPer = hld3         
+
+            # self.player.rect = pygame.Rect((startCell.px, startCell.py), (64,64)) 
+            # self.player.orient =  startCell['playerStart']
+            # self.players.set_view(self.screen)  
+            # self.players.draw(self.screen)
+            # self.player.setSprite()                         
 																				        # Initializing other animated sprites
         try:
             for cell in self.tilemap.layers['sprites'].find('src'):
@@ -102,8 +148,25 @@ class Game(object):
                 if self.save[cell['saveIndex']] == 'true':
                    statebasedSprite((cell.px,cell.py), cell, self.objects, self.collision, self.interactable)
 
-            for cell in self.tilemap.layers['enemySprites'].find('src'):
-                enemySprite((cell.px,cell.py), cell, 'down', self.objects, self.collision, self.removable, self.named)
+            hld = 0
+
+            print (mapFile)
+
+            if mapFile == 'WallsOrFireBalls.tmx':
+                self.player.transitionIn = True
+                print (self.player.transitionIn)
+
+                
+                for cell in self.tilemap.layers['enemySprites'].find('src'):
+                    print (str(self.player.WOFlevel) + "this is the level i should be at")
+                    if hld < self.player.WOFlevel + 3:
+                        enemySprite((cell.px,cell.py), cell, 'down', self.objects, self.collision, self.removable, self.named, self.enemies)
+                        hld += 1
+
+
+            else:
+                for cell in self.tilemap.layers['enemySprites'].find('src'):
+                    enemySprite((cell.px,cell.py), cell, 'down', self.objects, self.collision, self.removable, self.named)
 
             hldSprites = self.tilemap.layers['removableSprites'].find('src')
             
@@ -127,9 +190,8 @@ class Game(object):
             
 
         # Initializing player sprite
-        startCell = self.tilemap.layers['triggers'].find('playerStart')[0]
-        self.player = Player((startCell.px, startCell.py), 
-                             startCell['playerStart'], self.players)
+
+
         self.tilemap.layers.append(self.players)
         self.tilemap.set_focus(self.player.rect.x, self.player.rect.y) 
         
@@ -228,7 +290,11 @@ class Game(object):
             mainMenu.disable()
             mainMenu.reset(1)
             clock = pygame.time.Clock()
-            
+
+            pygame.mixer.music.load('sounds/Temporal-Parity.wav')
+            #pygame.mixer.music.play(-1)     
+            #play_sound('sounds/Temporal-Parity.mp3')       
+                        
 
             
 
@@ -248,16 +314,93 @@ class Game(object):
                         return
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                         self.initMenu()
-                thisImage = pygame.image.load('MGlogo.jpg')
+                thisImage = pygame.image.load('images/MGlogo.jpg')
+                fullHeart = pygame.image.load('images/fullheart.png')
+                emptyHeart = pygame.image.load('images/emptyheart.png')
 
                 self.tilemap.update(dt, self)
                 screen.fill((0,0,0))
 
                 self.tilemap.draw(self.screen)
-                
 
+                pygame.draw.rect(gameDisplay, COLOR_WHITE, (105, 25, 230, 60))
+
+                pygame.draw.rect(gameDisplay, COLOR_LIMEGREEN, (120,30,self.player.magicPer * 2,50))
                 
+                if self.player.hearts >= 1:
+                    gameDisplay.blit(fullHeart, (30, 30))
+                else: 
+                    gameDisplay.blit(emptyHeart, (30, 30))                    
+                if self.player.hearts >= 2:
+                    gameDisplay.blit(fullHeart, (30, 60))
+                else: 
+                    gameDisplay.blit(emptyHeart, (30, 60))
+                if self.player.hearts >= 3:
+                    gameDisplay.blit(fullHeart, (30, 90)) 
+                else: 
+                    gameDisplay.blit(emptyHeart, (30, 90))                    
+                if self.player.hearts >= 4:
+                    gameDisplay.blit(fullHeart, (30, 120))
+                else: 
+                    gameDisplay.blit(emptyHeart, (30, 120))                                                                               
                 gameDisplay.blit(thisImage, (690, 500))
+
+                if self.mapFile == 'WallsOrFireBalls.tmx':
+                    if self.player.transitionIn :
+
+                        self.player.transTime += dt
+                        if self.player.transTime < 1000:
+                            #self.tilemap.draw(self.screen)
+                            if self.mapFile == 'WallsOrFireBalls.tmx': 
+
+                                largeText = pygame.font.Font('fonts/Exo2-MediumCondensed.ttf',65)
+                                TextSurf, TextRect = text_objectsColor('Level ' + str(self.player.WOFlevel), largeText, COLOR_LIGHTCORAL)
+        
+                                TextRect.center = ((400),(100))
+                                gameDisplay.blit(TextSurf, TextRect)
+
+                        else:
+                            self.player.transTime = 0
+                            self.player.transitionIn = False
+
+                    if self.player.transitionOut:
+                        
+                        if self.player.hearts > 0:
+                            self.player.transTime += dt
+                            if self.player.transTime < 1000:
+                                #self.tilemap.draw(self.screen)
+                                if self.mapFile == 'WallsOrFireBalls.tmx': 
+
+                                    largeText = pygame.font.Font('fonts/Exo2-MediumCondensed.ttf',65,)
+                                    TextSurf, TextRect = text_objectsColor('Going to level ' + str(self.player.WOFlevel), largeText, COLOR_LIGHTCORAL)
+            
+                                    TextRect.center = ((400),(100))
+                                    gameDisplay.blit(TextSurf, TextRect)
+                                    
+                            else:
+                                self.player.transTime = 0
+                                self.player.transitionOut = False
+                                self.initArea('WallsOrFireBalls.tmx')
+                        else:
+                            self.player.transTime += dt
+                            if self.player.transTime < 1000:
+                                #self.tilemap.draw(self.screen)
+                                if self.mapFile == 'WallsOrFireBalls.tmx': 
+
+                                    largeText = pygame.font.Font('fonts/Exo2-MediumCondensed.ttf',65)
+                                    TextSurf, TextRect = text_objectsColor('OH GOD YOUR DYING', largeText, red)
+            
+                                    TextRect.center = ((400),(100))
+                                    gameDisplay.blit(TextSurf, TextRect)
+                                    
+                            else:
+                                self.player.transTime = 0
+                                self.player.transitionOut = False
+                                self.initArea('babyHell.tmx')
+                                self.samePlayer = False
+
+
+
                 pygame.display.flip()
             
 
@@ -404,6 +547,10 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption("Pyllet Town")
     os.system('python3 test3.py')
+    pygame.mixer.pre_init(44100, 16, 2, 4096)
+    pygame.mixer.init()
+    pygame.mixer.music.set_volume(0.1)
+
     
     
     Game(screen).main()

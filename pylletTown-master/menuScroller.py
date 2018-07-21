@@ -32,37 +32,37 @@ class menuScroller():
 
 
 	# old implementation
-	def scrollDown(self):
-		if self.inventory[self.counter] == self.bottom:
-			hld = 2
-			#we dond do anything here
-		else:
-			if self.length - 1 - self.counter > 5: 
-				self.counter += 1 
-				self.top = self.inventory[self.counter]
-				self.boxedItem = self.inventory[self.counter]
-				self.bottom = self.inventory[5 + self.counter]
-			else:
-				self.counter += 1 
+	# def scrollDown(self):
+	# 	if self.inventory[self.counter] == self.bottom:
+	# 		hld = 2
+	# 		#we dond do anything here
+	# 	else:
+	# 		if self.length - 1 - self.counter > 5: 
+	# 			self.counter += 1 
+	# 			self.top = self.inventory[self.counter]
+	# 			self.boxedItem = self.inventory[self.counter]
+	# 			self.bottom = self.inventory[5 + self.counter]
+	# 		else:
+	# 			self.counter += 1 
 				
-				self.boxedItem = self.inventory[self.counter]	
+	# 			self.boxedItem = self.inventory[self.counter]	
 
 
-	# old implementation
-	def scrollUp(self):
-		if self.counter == 0:
+	# # old implementation
+	# def scrollUp(self):
+	# 	if self.counter == 0:
 
-			# we do nothing here
-			hld3 = 2
-		else:
-			if self.top == self.first:
-				self.counter -= 1
-				self.boxedItem = self.inventory[self.counter]
-			else:
-				self.counter -= 1
-				self.top = self.inventory[self.FindIndex(self.top) - 1]
-				self.boxedItem = self.inventory[self.counter]
-				self.bottom = self.inventory[self.counter]
+	# 		# we do nothing here
+	# 		hld3 = 2
+	# 	else:
+	# 		if self.top == self.first:
+	# 			self.counter -= 1
+	# 			self.boxedItem = self.inventory[self.counter]
+	# 		else:
+	# 			self.counter -= 1
+	# 			self.top = self.inventory[self.FindIndex(self.top) - 1]
+	# 			self.boxedItem = self.inventory[self.counter]
+	# 			self.bottom = self.inventory[self.counter]
 
 
 	def scrollUP(self):

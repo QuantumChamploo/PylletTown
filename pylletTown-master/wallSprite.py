@@ -9,6 +9,7 @@ class wallSprite(pygame.sprite.Sprite):
 		self.height = 13
 		self.hasInteraction = False
 		self.direction = direction
+		self.hldTime = 0
 		self.name = 'wall'
 		if direction == 'left' or direction == 'right':
 			self.image = pygame.transform.rotate(self.image, 90)
@@ -28,5 +29,11 @@ class wallSprite(pygame.sprite.Sprite):
 
 
 	def update(self, dt, game):
-		hld = 3
+		self.hldTime += dt
+		if self.hldTime >= 4000:
+
+			self.remove(self.groups())
+			self.kill()
+
+			game.player.wallCounter -= 1
 

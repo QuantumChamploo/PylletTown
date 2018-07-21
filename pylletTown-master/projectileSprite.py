@@ -85,6 +85,7 @@ class projectileSprite(pygame.sprite.Sprite):
 				self.rect.y = -100
 				self.remove(game.objects)
 				self.kill()
+				print ('should have killed a projectile ')
 				
 			
 		#self.rect = pygame.Rect(currLocation, (self.width,self.height))

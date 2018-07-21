@@ -9,6 +9,7 @@ from scrollText import scrollText
 from projectileSprite import projectileSprite
 from wallSprite import wallSprite
 from enemySprite import enemySprite
+from collectibleSprite import collectibleSprite
 import os
 
 
@@ -23,6 +24,22 @@ COLOR_WHITE = (255, 255, 255)
 COLOR_BLACK = (0, 0, 0)
 COLOR_MAROON =  (40, 0, 40)
 MENU_BACKGROUND_COLOR = (228, 55, 36)
+COLOR_LIMEGREEN = (0, 255, 127)
+
+
+
+
+_sound_library = {}
+
+def play_sound(path):
+  pygame.mixer.music.set_volume(0.1)
+  global _sound_library
+  sound = _sound_library.get(path)
+  if sound == None:
+    canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
+    sound = pygame.mixer.Sound(canonicalized_path)
+    _sound_library[path] = sound
+  sound.play()
 
 
 """ 
@@ -45,6 +62,11 @@ textBoxDictionary = {'Prof Glyph': scrollText('Aye, fuck off mate I really want 
 def text_objects(text, font):
         textSurface = font.render(text, True, black)
         return textSurface, textSurface.get_rect()
+
+def text_objectsColor(text, font, color):
+        textSurface = font.render(text, True, black)
+        return textSurface, textSurface.get_rect()
+
 
 
 
@@ -116,6 +138,7 @@ def npcUpdate(spriteName, sprite, dt, game, cutscene):
 			if isinstance(hldSprite, wallSprite):
 				hldSprite.rect.colliderect(sprite.rect)
 				sprite.rect = lastRect3
+			
 
 		sprite.currLocation = (sprite.rect.x, sprite.rect.y)
 		hldScene.decrementCurrMove()	
@@ -151,6 +174,10 @@ def wavedashUpdate(player, game):
 
 		if len(game.tilemap.layers['triggers'].collide(player.rect, 'solid')) > 0:
 			player.rect = lastRect
+
+		for sprite in game.collision:
+			if player.rect.colliderect(sprite.rect):
+				player.rect = lastRect 
 
 		game.tilemap.set_focus(player.rect.x, player.rect.y)
 
@@ -306,12 +333,27 @@ class Player(pygame.sprite.Sprite):
 		self.waveDashing = False
 		self.bool = False
 		self.fireHold = 0
-		self.projectiles = []
+		self.wallCounter = 0
+		#self.projectiles = []
+		self.hearts = 4
+		self.invincible = False
+		self.invcTime = 0
+		self.parry = False
+		self.parryTime = 0
+		self.wallHld = False
+		self.parryHld = False
+		self.WOFlevel = 1
+		self.transTime = 0
+		self.transitionIn = False
+		self.transitionOut = False
+		self.magicPer = 100
 
 
 		# Set default orientation
 		self.setSprite()
-        
+
+
+      
 	def setSprite(self):
 		# Resets the player sprite sheet to its default position 
 		# and scrolls it to the necessary position for the current orientation
@@ -326,19 +368,109 @@ class Player(pygame.sprite.Sprite):
 		    self.image.scroll(0, -192)
 
 	def update(self, dt, game):
+		# print (self.transitionIn)
+		# if self.transitionIn :
+		# 	print ('ahahaha')
+		# 	self.transTime += dt
+		# 	if self.transTime < 1000:
+		# 		game.tilemap.draw(game.screen)
+		# 		if game.mapFile == 'WallsOrFireBalls.tmx': 
+		# 			gameDisplay = pygame.display.set_mode((800,600))
+
+		# 			largeText = pygame.font.Font('freesansbold.ttf',35)
+		# 			TextSurf, TextRect = text_objects('Welcome to level ' + str(self.WOFlevel), largeText)
+		
+		# 			TextRect.center = ((400),(520))
+		# 			gameDisplay.blit(TextSurf, TextRect)
+		# 			print ('trying to show this')
+		# 	else:
+		# 		self.transTime = 0
+		# 		self.transitionIn = False
+
+		if game.mapFile == 'WallsOrFireBalls.tmx':
+			if len(game.enemies) == 0:
+				if self.transitionOut == False:
+					self.WOFlevel += 1
+					self.transitionOut = True
+					game.samePlayer = True
+			if self.hearts < 1:
+				self.transitionOut = True
+				game.samePlayer = True
+
+		
+	
+
+
+
+		if self.invincible:
+			self.invcTime += dt
+			if self.invcTime > 800:
+				self.invcTime = 0
+				self.invincible = False
+		if self.parry:
+			self.parryTime += dt
+			
+			if self.parryTime > 800:
+				self.parryTime = 0
+				self.parry = False
+
+
+
+
 		self.fireHold += 5
 		if self.fireHold > 30:
 			self.fireHold = 0
+		for sprite in game.objects:
+			if isinstance(sprite, projectileSprite):
+				for hldSprite in game.objects:
+					if isinstance(hldSprite, removableSprite):
+						# if rectCollision(sprite, hldSprite):
+						# 	hldSprite.beenMoved = True
+						# if rectCollision(hldSprite, sprite):
+						# 	hldSprite.beenMoved = True	
+
+						if hldSprite.rect.colliderect(sprite.rect):
+							hldSprite.beenMoved = True
+					if isinstance(hldSprite, enemySprite):
+						# if rectCollision(sprite, hldSprite):
+						# 	hldSprite.beenMoved = True
+						# if rectCollision(hldSprite, sprite):
+						# 	hldSprite.beenMoved = True	
+						if sprite.name == 'fireball':
+							
+							if hldSprite.rect.colliderect(sprite.rect):
+								hldSprite.beenMoved = True
+								collectibleSprite(hldSprite.location, 'magic jar', game.objects, game.removable, game.collision)
+
+					if isinstance(hldSprite, wallSprite):
+						if hldSprite.rect.colliderect(sprite.rect):
+							sprite.beenMoved = True	
+
+				if sprite.name == "enemyFireball":
+					if self.waveDashing == True:
+						if sprite.rect.colliderect(self.rect):
+							sprite.beenMoved = True
+					elif self.invincible == False:
+						if self.parry == False:
+							if sprite.rect.colliderect(self.rect):
+								self.hearts -= 1
+								self.invincible = True
+
+								
+								play_sound('sounds/DK - Super Hit.wav')
+								
+						if self.parry == True:
+							play_sound('sounds/Link - Whoosh.wav')
+							self.invincible = True
+							projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects, game.projectiles, game.named)
+							self.hearts += 1
+
 
 		
 
 		key = pygame.key.get_pressed()
 
-		if self.inCutscene == True:
-			cutsceneUpdate(self, dt, game, self.whichCutscene)
-			self.jumping = False
-			self.waveDashing = False
-			self.bool = False
+
 
 		if self.jumping == True and self.bool == True:
 			if key[pygame.K_e] and key[pygame.K_r] and 37 > self.hldy > 27:
@@ -362,30 +494,11 @@ class Player(pygame.sprite.Sprite):
 			wavedashUpdate(self, game)
 
 
-		for sprite in game.objects:
-			if isinstance(sprite, projectileSprite):
-				for hldSprite in game.objects:
-					if isinstance(hldSprite, removableSprite):
-						# if rectCollision(sprite, hldSprite):
-						# 	hldSprite.beenMoved = True
-						# if rectCollision(hldSprite, sprite):
-						# 	hldSprite.beenMoved = True	
-
-						if hldSprite.rect.colliderect(sprite.rect):
-							hldSprite.beenMoved = True
-					if isinstance(hldSprite, enemySprite):
-						# if rectCollision(sprite, hldSprite):
-						# 	hldSprite.beenMoved = True
-						# if rectCollision(hldSprite, sprite):
-						# 	hldSprite.beenMoved = True	
-						if sprite.name == 'fireball':
-							
-							if hldSprite.rect.colliderect(sprite.rect):
-								hldSprite.beenMoved = True
-					if isinstance(hldSprite, wallSprite):
-						if hldSprite.rect.colliderect(sprite.rect):
-							sprite.beenMoved = True	
-
+		if self.inCutscene == True:
+			cutsceneUpdate(self, dt, game, self.whichCutscene)
+			self.jumping = False
+			self.waveDashing = False
+			self.bool = False
 
 
 
@@ -393,7 +506,29 @@ class Player(pygame.sprite.Sprite):
         # Setting orientation and sprite based on key input: 
 
 		else:
-
+		    for event in pygame.event.get():
+		        if event.type == pygame.KEYUP and event.key == pygame.K_c:
+		            pass
+		            # self.parry = True
+		            # print ('oh boy im parrying ')
+		        if event.type == pygame.KEYUP and event.key == pygame.K_g:
+		            pass
+		            # if self.wallCounter < 10:
+		            #     wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects, game.collision)
+		            #     self.wallCounter += 1
+		    if not key[pygame.K_g]:
+		        self.wallHld = False
+		    if not key[pygame.K_c]:
+		    	if self.parryTime == 0:
+		    		self.parryHld = False
+		    	if self.parryTime > 850:
+		    		self.parryHld = False 
+		    if key[pygame.K_c]:
+		    	
+		    	if not self.parryHld:
+		    		
+		    		self.parry = True
+		    		self.parryHld = True		    		
 		    if key[pygame.K_UP]:
 		        if not self.walking:
 		            if self.orient != 'up':
@@ -424,13 +559,28 @@ class Player(pygame.sprite.Sprite):
 		    	self.bool = True
 		    elif key[pygame.K_f]:
 		    	if self.fireHold == 0:
-		    		projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects, game.projectiles, game.named)
+		    		if self.magicPer >= 5:
+		    			projectileSprite((self.rect[0], self.rect[1]), self.orient, 'fireball', game.objects, game.projectiles, game.named)
+		    			self.magicPer -= 5
+		    			play_sound('sounds/Dot.wav')
+
 
 		    
 		    elif key[pygame.K_g]:
-		    	wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects)
+		    	if not self.wallHld:
+		    	
+		        	if self.wallCounter < 10:
+		        		wallSprite((self.rect[0], self.rect[1]), self.orient, game.objects, game.collision)
+		        		self.wallCounter += 1
+		        		self.wallHld = True
+
+
+
+
 		    
 		    elif key[pygame.K_a] and not self.walking:
+
+		        #import pdb; pdb.set_trace()
 		        
 		        if not self.walking:
 		            lastRect2 = self.rect.copy()
@@ -451,6 +601,8 @@ class Player(pygame.sprite.Sprite):
 		            # 		sprite.beenMoved = True
 
 		            # 	print ('in the nadnafsnd')
+
+		            ## this needs to be looked at
 		            for sprite in game.interactable:
 
 		            	if sprite.hasInteraction == True:
@@ -492,9 +644,6 @@ class Player(pygame.sprite.Sprite):
 		            				sprite.pause = False
 		            				sprite.pacing = hld
 
-	            		if abs(sprite.currLocation[0] - self.rect.x) < 8:
-	            			if abs(sprite.currLocation[1] - self.rect.y) < 8:
-	            				self.rect = lastRect2
 
 
 
@@ -597,17 +746,17 @@ class Player(pygame.sprite.Sprite):
 		    # Reset to the previous rectangle if player collides
 		    # with anything in the foreground layer
 		    for sprite in game.collision:
-		    	if isinstance(sprite, removableSprite):
 
-		    		sprite.update(dt, game)
-		    	if abs(sprite.currLocation[0] - self.rect.x) < 64:
-		    		if abs(sprite.currLocation[1] - self.rect.y) < 64:
-		    			if isinstance(sprite, removableSprite):
-		    				
-		    		
-		    				sprite.beenMoved = True
-		    			else:
-		    				hlder = 8
+		    	if isinstance(sprite, collectibleSprite):
+		    		if self.rect.colliderect(sprite.rect):
+		    			sprite.beenMoved = True 
+		    			if sprite.name == 'magic jar':
+		    				self.magicPer += 5
+
+
+		    	if isinstance(sprite, removableSprite):
+		    		if self.rect.colliderect(sprite.rect):
+		    			sprite.beenMoved = True
 
 		    				
 		    	if isinstance(sprite, wallSprite):
@@ -619,6 +768,12 @@ class Player(pygame.sprite.Sprite):
 		    	if isinstance(sprite, statebasedSprite):
 		    		if self.rect.colliderect(sprite):
 		    			self.rect = lastRect
+		    	if isinstance(sprite, enemySprite):
+		    		if self.rect.colliderect(sprite):
+		    			if self.waveDashing == True:
+		    				sprite.beenMoved = True
+		    			else:
+		    				self.rect = lastRect		    			
 		    		
 		    if len(game.tilemap.layers['triggers'].collide(self.rect, 
 		                                                    'solid')) > 0:

@@ -135,7 +135,7 @@
  <tileset firstgid="265" source="mushy.tsx"/>
  <tileset firstgid="285" source="colorGround.tsx"/>
  <tileset firstgid="292" source="gamingCabinets.tsx"/>
- <layer name="background" width="40" height="36" visible="0">
+ <layer name="background" width="40" height="36">
   <data encoding="base64" compression="zlib">
    eJy1mGtygzAMhFHaa9iQyeV6/xN0mKDpskiW5JIfOwT84PNKFhBZlkUMfR2y2kb9PVXnuaufxfeS+/iidWf1A9r5VHfNf5eQ7U6+p7y1/97kLfyNwnFe22iMtkcc1vVGczY5z9eIoRFHo3U1GmeNx/kjPm+9ntgzz1tla8HcER+vK6tG62KfuC/P35L+7f265NbKPuG9M+Ot9gwfMmZ864eQT5m/E+Nn+B7LWxn/upzvh1xdrn2ZCfPpE3zoA+eh18+rP5n9wetl8f35Gt63w7HLlYsZlYO9Qf9wz+m5zq/5xvG06iXXNyu2o/r3cPxjzzvdY5PrdStWfE15rf1drc/WOtknjtloX1rnvO8rfF49Y3l8VSlrZv9y/mjeYHz49ywf53f2+cZ1yxPn26ivVa9wbRk+rg1Zxurzmvmy+Yfj1PM1of/kXsU/9mG/twyObcDI8bTiy/mezT/ViA2ZZn3Emprh49q7BjGusInhIeZfxT9k5L2iPLL8fQOuMIbrDu43bEc9jlhX6h/nh+UVe8vvj5ucn9vWEVV5f9mIzeKZ2ccY54p/Hdq87zLed955Vln/lA1rkNUvmp/9teKPbTP+sZcRH753R/WS86Gaf8iWeb495cyYYety9a9J/Pyo+vcS2z8vtnitydm/6P1lJv9eNMZ694qk32Gf9g8Zn8Swic+NfKP8szij/Kv8j1b5Vo3yveLfp/+H/AWxgVjF
   </data>
