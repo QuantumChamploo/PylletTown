@@ -16,4 +16,3 @@ class statebasedSprite(pygame.sprite.Sprite):
 		self.currLocation = location
 		self.saveIndex = int(cell['saveIndex'])
 		self.hasInteraction = False 
-		self.name = ''

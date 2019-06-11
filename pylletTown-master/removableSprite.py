@@ -12,7 +12,7 @@ class removableSprite(pygame.sprite.Sprite):
 		self.hasInteraction = False
 		self.beenMoved = False	
 		self.location = location
-		self.name = ''
+
 
 	def update(self, dt, game):
 		if self.beenMoved == True:
@@ -20,4 +20,6 @@ class removableSprite(pygame.sprite.Sprite):
 			self.currLocation = (-100, -100)
 			self.rect = pygame.Rect(self.currLocation, (self.width,self.height))
 			self.beenMoved = False
+			self.remove(self.groups())
+			self.kill()
 			
