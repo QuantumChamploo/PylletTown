@@ -18,8 +18,8 @@ def showItemText(itemText, gameDisplay):
 
 
 def menuTextUpdate(gameDisplay, menuScroller, miniDisplay):
-	arrowImage = pygame.image.load('images/arrow.png')
-	bottomImage = pygame.image.load('images/sideMenuBottom.png')
+	arrowImage = pygame.image.load('../images/arrow.png')
+	bottomImage = pygame.image.load('../images/sideMenuBottom.png')
 
 	spacing = 60
 	topIndex = menuScroller.inventory.index(menuScroller.top)
