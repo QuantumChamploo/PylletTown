@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import tmx
+#import tmx
 from menuScroller import *
 from menuSet import *
 
@@ -33,9 +33,9 @@ def text_objects(text, font):
 	textSurface = font.render(text, True, black)
 	return textSurface, textSurface.get_rect()
 
-textBoxImage = pygame.image.load('images/sideMenuBox.png')
-arrowImage = pygame.image.load('images/arrow.png')
-bottomImage = pygame.image.load('images/sideMenuBottom.png')
+textBoxImage = pygame.image.load('../images/sideMenuBox.png')
+arrowImage = pygame.image.load('../images/arrow.png')
+bottomImage = pygame.image.load('../images/sideMenuBottom.png')
 pygame.transform.rotate(textBoxImage, 90)
 largeText = pygame.font.Font('freesansbold.ttf',25)
 

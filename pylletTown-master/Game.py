@@ -7,11 +7,11 @@ import glob
 import os
  
 from Player import Player
-from statebasedSprite import statebasedSprite
-from SpriteLoop import SpriteLoop 
-from npcSprite import npcSprite
-from removableSprite import removableSprite
-from enemySprite import enemySprite
+from classes.statebasedSprite import statebasedSprite
+from classes.SpriteLoop import SpriteLoop 
+from classes.npcSprite import npcSprite
+from classes.removableSprite import removableSprite
+from classes.enemySprite import enemySprite
 
 
 

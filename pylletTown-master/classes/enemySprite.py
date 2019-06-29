@@ -1,8 +1,8 @@
 import pygame
-from cutScene import cutScene
-from spriteMove import spriteMove
-from wallSprite import wallSprite
-from projectileSprite import projectileSprite
+from classes.cutScene import cutScene
+from classes.spriteMove import spriteMove
+from classes.wallSprite import wallSprite
+from classes.projectileSprite import projectileSprite
 import random
 
 

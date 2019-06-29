@@ -1,15 +1,15 @@
 import pygame
-from cutScene import cutScene
-from statebasedSprite import statebasedSprite
-from removableSprite import removableSprite
-from SpriteLoop import SpriteLoop 
-from npcSprite import npcSprite
-from spriteMove import spriteMove
-from scrollText import scrollText
-from projectileSprite import projectileSprite
-from wallSprite import wallSprite
-from enemySprite import enemySprite
-from collectibleSprite import collectibleSprite
+from classes.cutScene import cutScene
+from classes.statebasedSprite import statebasedSprite
+from classes.removableSprite import removableSprite
+from classes.SpriteLoop import SpriteLoop 
+from classes.npcSprite import npcSprite
+from classes.spriteMove import spriteMove
+from classes.scrollText import scrollText
+from classes.projectileSprite import projectileSprite
+from classes.wallSprite import wallSprite
+from classes.enemySprite import enemySprite
+from classes.collectibleSprite import collectibleSprite
 import os
 
 
