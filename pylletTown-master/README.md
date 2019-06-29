@@ -1,12 +1,9 @@
 pylletTown
 ==========
 
-pylletTown is a [TMX](https://github.com/bjorn/tiled/wiki/TMX-Map-Format) based demo of the video game [Pokémon Red/Blue](https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red_and_Blue) running in python 3.
-I created it as a working showcase for my fork of the pygame TMX library that I've [ported from python 2.x to python 3](https://github.com/RenfredH04/tmx). The library allows for easy implementation and customization of tile based maps like the ones contained in this demo.
+pylletTown is a [TMX](https://github.com/bjorn/tiled/wiki/TMX-Map-Format) based demo of RPmG demo, and adventure and turn based game running in python 3.
 
-Installation of [pygame](http://www.pygame.org/install.html) and any version of [python3](http://www.python.org/getit/) is required to run this demo
-
-View a demo video here: http://youtu.be/KnOMXyqbxqY
+![alt text](https://raw.githubusercontent.com/QuantumChamploo/PylletTown/blob/master/pylletTown-master/images/MGlogo.jpg)
 
 ![alt tag](http://i.imgur.com/kudkDNn.png)
 
