@@ -1,0 +1,14 @@
+
+
+__pycache__/
+classes/__pycache__/
+pygameMenu/__pycache__/
+
+
+
+.DS_Store
+../.DS_Store
+
+
+*.pyc
+*.DS_Store

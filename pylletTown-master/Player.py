@@ -86,7 +86,7 @@ def textUpdate(gameDisplay, textScript, game):
 	TextSurf2, TextRect2 = text_objects(hldScroll.bottom, largeText)
 	TextRect.center = ((400),(520))
 	TextRect2.center = ((400),(570))
-	textBoxImage = pygame.image.load('smallTextBox.png')
+	textBoxImage = pygame.image.load('images/smallTextBox.png')
 
 
 	game.tilemap.draw(game.screen)
