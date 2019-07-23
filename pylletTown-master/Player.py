@@ -678,7 +678,7 @@ class Player(pygame.sprite.Sprite):
 		            if len(game.tilemap.layers['actions'].collide(self.rect, 'sign')) > 0:
 		                clock = pygame.time.Clock()
 		                gameDisplay = pygame.display.set_mode((800,600))  
-		                thisImage = pygame.image.load('uujihyugtguyh.png')
+		                thisImage = pygame.image.load('images/uujihyugtguyh.png')
 		                game.save[3] = 'CHANGED'
 		                signCell = game.tilemap.layers['actions'].collide(self.rect, 'sign')[0]
 		                
