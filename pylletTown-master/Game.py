@@ -215,7 +215,7 @@ class Game(object):
     def initMenu(self):
         """"create generic menu for in game    """
         
-        gameDisplay = pygame.display.set_mode((800,600))
+        gameDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 
 
@@ -282,7 +282,7 @@ class Game(object):
 
     def introMenu(self):
 
-        gameDisplay = pygame.display.set_mode((800,600))
+        gameDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
         clock = pygame.time.Clock()
 
@@ -531,7 +531,7 @@ class Game(object):
 
         
 
-        gameDisplay = pygame.display.set_mode((800,600))
+        gameDisplay = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         
         
         
@@ -544,7 +544,7 @@ class Game(object):
        
 if __name__ == '__main__':
     pygame.init()
-    screen = pygame.display.set_mode((640, 480))
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption("Pyllet Town")
     os.system('python3 test3.py')
     pygame.mixer.pre_init(44100, 16, 2, 4096)
